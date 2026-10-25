@@ -1,0 +1,149 @@
+{
+  "scenario_id": "BT-SYN-03",
+  "match_id": "SIM-MATCH-03",
+  "match_label": "Aster FC vs Boreal FC \u2014 synthetic match 03",
+  "run_id": "BT-SYN-03-RUN-01",
+  "title": "Check back toward midfield",
+  "description": "A support movement can trade advanced space for proximity to the ball.",
+  "match_clock": "13:00.00\u201313:03.48 (simulated)",
+  "real_match": false,
+  "competition": null,
+  "real_player_names": null,
+  "source": "Scripts/run_example_suite.py fixture()",
+  "sample_rate_hz": 25,
+  "source_match_note": "Authored scenario, not reconstructed from a real match.",
+  "roster": {
+    "Home_1": {
+      "team": "Aster FC",
+      "shirt_number": 1,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_2": {
+      "team": "Aster FC",
+      "shirt_number": 2,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_3": {
+      "team": "Aster FC",
+      "shirt_number": 3,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_4": {
+      "team": "Aster FC",
+      "shirt_number": 4,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_5": {
+      "team": "Aster FC",
+      "shirt_number": 5,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_6": {
+      "team": "Aster FC",
+      "shirt_number": 6,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_7": {
+      "team": "Aster FC",
+      "shirt_number": 7,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_8": {
+      "team": "Aster FC",
+      "shirt_number": 8,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_9": {
+      "team": "Aster FC",
+      "shirt_number": 9,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_10": {
+      "team": "Aster FC",
+      "shirt_number": 10,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Home_11": {
+      "team": "Aster FC",
+      "shirt_number": 11,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_1": {
+      "team": "Boreal FC",
+      "shirt_number": 1,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_2": {
+      "team": "Boreal FC",
+      "shirt_number": 2,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_3": {
+      "team": "Boreal FC",
+      "shirt_number": 3,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_4": {
+      "team": "Boreal FC",
+      "shirt_number": 4,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_5": {
+      "team": "Boreal FC",
+      "shirt_number": 5,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_6": {
+      "team": "Boreal FC",
+      "shirt_number": 6,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_7": {
+      "team": "Boreal FC",
+      "shirt_number": 7,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_8": {
+      "team": "Boreal FC",
+      "shirt_number": 8,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_9": {
+      "team": "Boreal FC",
+      "shirt_number": 9,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_10": {
+      "team": "Boreal FC",
+      "shirt_number": 10,
+      "real_name": null,
+      "synthetic": true
+    },
+    "Away_11": {
+      "team": "Boreal FC",
+      "shirt_number": 11,
+      "real_name": null,
+      "synthetic": true
+    }
+  }
+}

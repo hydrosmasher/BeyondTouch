@@ -1,0 +1,1 @@
+var selectedCase=new URLSearchParams(location.search).get('case')||'BT-SYN-01';if(!/^BT-SYN-(0[1-9]|1[0-2])$/.test(selectedCase))selectedCase='BT-SYN-01';document.write('<script src="'+selectedCase+'.js"><'+ '/script>');

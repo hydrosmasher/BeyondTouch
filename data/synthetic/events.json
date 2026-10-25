@@ -1,0 +1,37 @@
+{
+  "provenance": "Authored synthetic fixture; no real match data",
+  "coordinate_system": "metres, pitch centre origin; positive y upward",
+  "field_dimensions_m": [
+    105,
+    68
+  ],
+  "sampling_hz": 10,
+  "players_per_team": 11,
+  "events": [
+    {
+      "time_s": 0,
+      "type": "run_start",
+      "runner": "Home_11",
+      "carrier": "Home_8"
+    },
+    {
+      "time_s": 3.5,
+      "type": "pass_release",
+      "from": "Home_8",
+      "to": "Home_10"
+    },
+    {
+      "time_s": 4.3,
+      "type": "reception",
+      "player": "Home_10"
+    },
+    {
+      "time_s": 5.5,
+      "type": "shot",
+      "player": "Home_10",
+      "xg": null,
+      "outcome": null
+    }
+  ],
+  "note": "Events express scenario intent. Trajectories are hand-authored for integration testing; they are not empirical evidence of tactical causality."
+}

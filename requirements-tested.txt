@@ -1,0 +1,4 @@
+# Versions used with Python 3.12.14 for the supplied results
+numpy==2.3.5
+pandas==2.2.3
+Pillow==12.3.0
