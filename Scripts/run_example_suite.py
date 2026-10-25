@@ -30,11 +30,14 @@ CASES = [
 ]
 
 
-def fixture(index):
+def fixture(index, sample_rate_hz=50):
+    if sample_rate_hz not in (25, 50):
+        raise ValueError('Supported synthetic fixture rates are 25 or 50 Hz')
     key,title,description=CASES[index]
     h,a=synthetic_sequence()
-    # Reconstruct at source rate 25 Hz before differentiating: no noisy velocity filling.
-    times=np.round(np.arange(0,6.001,.04),8)
+    # Evaluate authored piecewise-linear trajectories at the requested rate.
+    # Synthetic sampling does not add real observations or prove camera compatibility.
+    times=np.round(np.arange(6 * sample_rate_hz + 1) / sample_rate_hz,8)
     def resample(df):
         import pandas as pd
         return pd.DataFrame({col: np.interp(times,df['Time [s]'],df[col]) for col in df.columns})
@@ -78,15 +81,17 @@ def fixture(index):
               'run_id':f'BT-SYN-{n:02d}-RUN-01','title':title,'description':description,
               'match_clock':f'{10+n:02d}:00.00–{10+n:02d}:03.48 (simulated)',
               'real_match':False,'competition':None,'real_player_names':None,
-              'source':'Scripts/run_example_suite.py fixture()','sample_rate_hz':25,
+              'source':'Scripts/run_example_suite.py fixture()','sample_rate_hz':sample_rate_hz,
+              'sample_interval_s':1 / sample_rate_hz,
+              'sampling_note':'Authored synthetic trajectories evaluated at this rate; not camera-derived tracking.',
               'source_match_note':'Authored scenario, not reconstructed from a real match.',
               'roster':{f'{t}_{p}':{'team':'Aster FC' if t=='Home' else 'Boreal FC','shirt_number':p,'real_name':None,'synthetic':True} for t in ['Home','Away'] for p in range(1,12)}}
-    # 3.48 s is an exact 25-Hz sample immediately before the authored 3.5-s release.
+    # Keep 3.48 s at both rates for a like-for-like window ending before release.
     return h,a,team,instance
 
 
-def process_case(index,output,reference_grid):
-    h,a,team,instance=fixture(index)
+def process_case(index,output,reference_grid,sample_rate_hz=50):
+    h,a,team,instance=fixture(index,sample_rate_hz)
     path=Path(output)/instance['scenario_id'];path.mkdir(parents=True,exist_ok=True)
     kwargs=dict(runner=team+'_11',receiver=team+'_10',carrier=team+'_8',attacking_team=team,
                 start_s=0,end_s=3.48,provenance='authored synthetic 11v11 fixture; no real match or named real players')
@@ -129,10 +134,12 @@ def process_case(index,output,reference_grid):
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=Path('outputs/examples'))
     p.add_argument('--workers',type=int,default=2);p.add_argument('--reference-grid',type=int,default=75)
+    p.add_argument('--sample-rate',type=int,choices=(25,50),default=50,
+                   help='Synthetic tracking samples per second (default: 50); unrelated to pitch-control grid columns')
     args=p.parse_args();output=args.output.resolve();output.mkdir(parents=True,exist_ok=True)
     rows=[]
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
-        tasks={pool.submit(process_case,i,str(output),args.reference_grid):i for i in range(len(CASES))}
+        tasks={pool.submit(process_case,i,str(output),args.reference_grid,args.sample_rate):i for i in range(len(CASES))}
         for f in as_completed(tasks):
             row=f.result();rows.append(row);print(f"{len(rows)}/12 {row['id']} {row['title']}: {row['net_m2']:+.2f} m²; grid difference {row['grid_delta_m2']:.2f} m²",flush=True)
     rows.sort(key=lambda r:r['id'])
@@ -140,8 +147,8 @@ def main():
     with (output/'summary.csv').open('w',newline='') as f:
         w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
     items=''.join(f'<tr><td><a href="{r["id"]}/first-sequence-replay.html">{r["id"]}</a></td><td>{html.escape(r["title"])}</td><td>{r["runner"]}</td><td>{r["net_m2"]:+.2f}</td><td>{r["defender_m"]:.2f}</td><td>{r["window_s"]:.2f}</td><td>{r["grid_delta_m2"]:.2f}</td></tr>' for r in rows)
-    page='''<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BeyondTouch example gallery</title><style>body{background:#0c1820;color:#eef3ec;font:16px system-ui;margin:40px auto;max-width:1250px;padding:20px}p{line-height:1.7;color:#b6c5c1}a{color:#f5cb68}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:14px 10px;border-bottom:1px solid #294048;text-align:left}th{color:#f5cb68}.scroll{overflow:auto}h1{font-size:40px}</style><h1>BeyondTouch</h1><h2>Twelve movement examples with evidence</h2><p>All examples are authored synthetic matches between fictional Aster FC and Boreal FC. Click a run ID for its replay, match and player labels, source, and numerical evidence. These examples test numerical behaviour, not empirical real-match accuracy. xG is unavailable.</p><p>25 Hz tracking · run window 0–3.48 s · 50-column baseline grid vs 75-column reference · 0.02 s numerical integration · offside filtering · fractional penalty-area cell overlap.</p><div class="scroll"><table><thead><tr><th>Run</th><th>Movement</th><th>Runner</th><th>Net model m²</th><th>Defender travel m</th><th>Window s</th><th>Grid difference m²</th></tr></thead><tbody>'''+items+'''</tbody></table></div><p>Net model m² is the isolated runner state sensitivity. Defender travel is associated observed distance, not distance caused. Window duration depends on declared thresholds. Negative-control and mirrored examples are included deliberately.</p>'''
-    (output/'index.html').write_text(page)
+    page='''<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BeyondTouch example gallery</title><style>body{background:#0c1820;color:#eef3ec;font:16px system-ui;margin:40px auto;max-width:1250px;padding:20px}p{line-height:1.7;color:#b6c5c1}a{color:#f5cb68}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:14px 10px;border-bottom:1px solid #294048;text-align:left}th{color:#f5cb68}.scroll{overflow:auto}h1{font-size:40px}</style><h1>BeyondTouch</h1><h2>Twelve movement examples with evidence</h2><p>All examples are authored synthetic matches between fictional Aster FC and Boreal FC. Click a run ID for its replay, match and player labels, source, and numerical evidence. These examples test numerical behaviour, not empirical real-match accuracy. xG is unavailable.</p><p>__SAMPLE_RATE__ Hz synthetic tracking · run window 0–3.48 s · 50-column baseline grid vs 75-column reference · 0.02 s numerical integration · offside filtering · fractional penalty-area cell overlap.</p><div class="scroll"><table><thead><tr><th>Run</th><th>Movement</th><th>Runner</th><th>Net model m²</th><th>Defender travel m</th><th>Window s</th><th>Grid difference m²</th></tr></thead><tbody>'''+items+'''</tbody></table></div><p>Net model m² is the isolated runner state sensitivity. Defender travel is associated observed distance, not distance caused. Window duration depends on declared thresholds. Negative-control and mirrored examples are included deliberately.</p>'''
+    (output/'index.html').write_text(page.replace('__SAMPLE_RATE__',str(args.sample_rate)))
     print('Gallery:',output/'index.html',flush=True)
 
 

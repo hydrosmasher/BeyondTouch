@@ -3,7 +3,7 @@
 `examples/` contains twelve authored synthetic match instances. Every instance
 includes gzipped Home/Away metric tracking CSVs and an instance.json with a match
 ID, run ID, simulated clock, shirt numbers, fictional teams and source description.
-All twelve use 25 Hz tracking on a 105 × 68 m pitch. None is a real match or a real
+All twelve use 50 Hz tracking on a 105 × 68 m pitch. None is a real match or a real
 player dataset. `synthetic/` retains the original 10 Hz fixture for the single-run
 entry point; it is different from the newer suite.
 

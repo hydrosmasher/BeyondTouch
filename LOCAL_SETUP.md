@@ -21,7 +21,7 @@ python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 python -m unittest discover -s tests -v
-python Scripts/run_example_suite.py --output outputs/examples --workers 2
+python Scripts/run_example_suite.py --sample-rate 50 --output outputs/examples --workers 2
 python Scripts/verify_example_suite.py --results outputs/examples
 ```
 
@@ -31,7 +31,7 @@ python Scripts/verify_example_suite.py --results outputs/examples
 py -3.12 -m venv .venv
 .venv\Scripts\python.exe -m pip install -r requirements.txt
 .venv\Scripts\python.exe -m unittest discover -s tests -v
-.venv\Scripts\python.exe Scripts/run_example_suite.py --output outputs/examples --workers 2
+.venv\Scripts\python.exe Scripts/run_example_suite.py --sample-rate 50 --output outputs/examples --workers 2
 .venv\Scripts\python.exe Scripts/verify_example_suite.py --results outputs/examples
 ```
 
@@ -48,7 +48,7 @@ python Scripts/run_movement_sequence.py --output outputs/first
 ```
 
 That entry point uses the original 10 Hz, 3.5-second fixture. The new 12-example
-suite uses 25 Hz and a 3.48-second endpoint. Do not compare them as identical inputs.
+suite uses 50 Hz and a 3.48-second endpoint. Do not compare them as identical inputs.
 
 To recompute a stored suite window from its files:
 

@@ -10,7 +10,9 @@
   "competition": null,
   "real_player_names": null,
   "source": "Scripts/run_example_suite.py fixture()",
-  "sample_rate_hz": 25,
+  "sample_rate_hz": 50,
+  "sample_interval_s": 0.02,
+  "sampling_note": "Authored synthetic trajectories evaluated at this rate; not camera-derived tracking.",
   "source_match_note": "Authored scenario, not reconstructed from a real match.",
   "roster": {
     "Home_1": {

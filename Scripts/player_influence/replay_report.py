@@ -74,7 +74,7 @@ def write_gif(path, bundle):
         draw = ImageDraw.Draw(im)
         draw.text((30, 20), 'BEYONDTOUCH / Movement evidence', font=title_font, fill='#f0f4ee')
         identity = m.get('instance', {})
-        source_label = (identity.get('match_id','SYNTHETIC FIXTURE')+' / '+identity.get('run_id','RUN 01')+' · '+identity.get('title','Authored 11v11 sequence'))
+        source_label = ('SYNTHETIC · '+str(identity.get('sample_rate_hz',round(1 / (bundle['frames'][1]['t']-bundle['frames'][0]['t']))))+' Hz · '+identity.get('match_id','FIXTURE')+' / '+identity.get('run_id','RUN 01'))
         draw.text((30, 62), source_label, font=small, fill='#a9bbb9')
         draw.rectangle([point(-length/2, width/2), point(length/2, -width/2)], fill='#164b40', outline='#99c4a9', width=2)
         draw.line([point(0,width/2), point(0,-width/2)], fill='#99c4a9', width=2)
@@ -145,7 +145,7 @@ for(let p of f.players){let color=p.team==='Home'?'#eef3ec':'#db7a76';if(p.id===
 ctx.fillStyle='white';ctx.beginPath();ctx.arc(X(f.ball[0]),Y(f.ball[1]),5,0,Math.PI*2);ctx.fill();ctx.stroke();
 let t=Math.min(f.t,m.window.end_s),e=m.timeline.reduce((a,b)=>Math.abs(a.time_s-t)<Math.abs(b.time_s-t)?a:b);
 $('live').innerHTML=row('Nearest-defender gap',fmt(e.nearest_defender_m)+' m')+row('Receiver location control',fmt(e.receiver_control*100,1)+'%')+row('Straight-lane clearance',fmt(e.lane_clearance_m)+' m')+row('Onside at this sample',e.onside?'Yes':'No')+row('Candidate receiving window',e.candidate_window?'OPEN':'CLOSED');
-$('clock').textContent=fmt(f.t,1)+' s';$('seek').value=frameIndex;$('phase').textContent=f.t<=m.window.end_s?'Run analysis window: before pass release.':'After pass release: replay context only. Shot xG is unavailable.';}
+$('clock').textContent=fmt(f.t,2)+' s';$('seek').value=frameIndex;$('phase').textContent=f.t<=m.window.end_s?'Run analysis window: before pass release.':'After pass release: replay context only. Shot xG is unavailable.';}
 function stop(){playing=false;$('play').textContent='Play';last=null;elapsed=0;}
 function tick(now){if(playing){if(last!==null)elapsed+=(now-last)/1000*Number($('speed').value);last=now;while(frameIndex<frames.length-1&&elapsed>=frames[frameIndex+1].t-frames[frameIndex].t){elapsed-=frames[frameIndex+1].t-frames[frameIndex].t;frameIndex++;draw();}if(frameIndex===frames.length-1)stop();}requestAnimationFrame(tick);}
 $('play').onclick=()=>{if(playing)stop();else{if(frameIndex===frames.length-1)frameIndex=0;playing=true;last=null;$('play').textContent='Pause';draw();}};
