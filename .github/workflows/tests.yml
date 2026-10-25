@@ -1,4 +1,4 @@
-name: Numerical checks
+name: Verify BeyondTouch
 on: [push, pull_request]
 permissions:
   contents: read
@@ -11,6 +11,6 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements.txt
-      - run: python -m unittest discover -s tests -v
-      - run: python Scripts/run_example_suite.py --sample-rate 50 --sample-rate 50 --output outputs/examples --workers 2
-      - run: python Scripts/verify_example_suite.py --results outputs/examples
+      - run: python src/run.py --check
+      - run: python src/run.py --all
+      - run: python src/verify_package.py

@@ -1,0 +1,48 @@
+"""One entry point for dependency setup, tests and the 50 Hz example suite."""
+import argparse
+import importlib.metadata
+from pathlib import Path
+import subprocess
+import sys
+import venv
+
+ROOT=Path(__file__).resolve().parents[1]
+EXPECTED={'numpy':'2.3.5','pandas':'2.2.3','Pillow':'12.3.0'}
+
+def ready():
+    try:return all(importlib.metadata.version(k)==v for k,v in EXPECTED.items())
+    except importlib.metadata.PackageNotFoundError:return False
+
+def run(args):
+    subprocess.run([sys.executable,*map(str,args)],cwd=ROOT,check=True)
+
+def main():
+    p=argparse.ArgumentParser(description='Run BeyondTouch at 50 Hz. No Python is needed to open START_HERE.html.')
+    g=p.add_mutually_exclusive_group();g.add_argument('--case',type=int,choices=range(1,13));g.add_argument('--check',action='store_true');g.add_argument('--all',action='store_true')
+    p.add_argument('--workers',type=int,default=2)
+    args=p.parse_args()
+    if sys.version_info[:2]!=(3,12):
+        p.exit(2,'Recalculation needs Python 3.12. To view all saved examples, open START_HERE.html instead.\n')
+    if args.workers<1:p.error('--workers must be positive')
+    if not ready():
+        target=ROOT/'.venv';exe=target/('Scripts/python.exe' if sys.platform=='win32' else 'bin/python')
+        if not target.exists():venv.EnvBuilder(with_pip=True).create(target)
+        if not exe.is_file():p.exit(2,'The existing .venv is incomplete. Rename it and rerun, or use START_HERE.html.\n')
+        version=subprocess.check_output([str(exe),'-c','import sys;print("%d.%d"%sys.version_info[:2])'],text=True).strip()
+        if version!='3.12':p.exit(2,'The existing .venv is not Python 3.12. Rename it and rerun.\n')
+        subprocess.run([str(exe),'-m','pip','install','-r',str(ROOT/'requirements.txt')],check=True)
+        return subprocess.call([str(exe),str(Path(__file__).resolve()),*sys.argv[1:]],cwd=ROOT)
+    print('BeyondTouch | Python 3.12 | 50 Hz synthetic tracking',flush=True)
+    if args.check:
+        run(['-m','unittest','discover','-s','src/tests','-v']);return 0
+    out=Path('outputs')/(f'case-{args.case:02d}' if args.case else 'examples')
+    cmd=['src/Scripts/run_example_suite.py','--sample-rate','50','--output',out,'--workers',str(args.workers)]
+    if args.case:cmd+=['--case',str(args.case)]
+    run(cmd)
+    if not args.case:run(['src/Scripts/verify_example_suite.py','--results',out])
+    print('\nFinished. Open this gallery in a browser:\n'+str(ROOT/out/'index.html'),flush=True)
+    return 0
+
+if __name__=='__main__':
+    try:sys.exit(main())
+    except subprocess.CalledProcessError as e:sys.exit(e.returncode)
