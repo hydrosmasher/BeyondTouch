@@ -31,7 +31,7 @@
     "end_s": 3.75,
     "focus_displacement_nominal_m": 8.596061058524702,
     "defender_displacement_nominal_m": 2.8639551531045835,
-    "initial_focus_gap_nominal_m": 3.1862967218008786,
+    "initial_focus_gap_nominal_m": 3.186296721800879,
     "final_focus_gap_nominal_m": 3.884282674861167,
     "direction_cosine": 0.9549898691443165,
     "anchor_nominal_xy": [
@@ -72,7 +72,7 @@
     "finisher_player_id": 1776,
     "finisher_arrival": {
       "time_s": 5.25,
-      "minimum_anchor_gap_nominal_m": 25.789380199392802,
+      "minimum_anchor_gap_nominal_m": 25.7893801993928,
       "approach_after_cover_nominal_m": 0.0,
       "same_zone_entry_supported": false
     }

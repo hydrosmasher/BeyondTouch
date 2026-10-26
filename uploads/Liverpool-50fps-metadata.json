@@ -11,10 +11,12 @@
   "output_fps": 50,
   "source_tracking_hz": 20,
   "positions_interpolated_before_rendering": true,
-  "playback_source_speed": 0.5,
-  "duration_s": 27,
-  "encoded_frames": 1350,
+  "playback_source_speed": 1,
+  "review_mode": "pause_compare_one_space_at_a_time_reveal",
+  "max_options_per_pause": 2,
+  "duration_s": 50.9,
+  "encoded_frames": 2545,
   "source_sha256": "b0a571b62b0fccb84175d19a6cef4724731e7a7851eb5956ef8c4ea799bfe0a1",
-  "mp4_sha256": "96447496a9ff822e9e08a9f8aa45d79731ebe920bf8daeca5efc8190e0a54aeb",
+  "mp4_sha256": "6b9ebe296a46cfc42bd245cf06b2b96c3541ae81866b7bab21f4700d3ff87e16",
   "no_causal_attribution": true
 }
