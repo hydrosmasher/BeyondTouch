@@ -1,0 +1,109 @@
+[
+  {
+    "original_name": "dimaria_goal_pitch_control_CHANGE-ezgif.com-speed.gif",
+    "target": "examples/di-maria-final/sources/pitch-control-change.gif",
+    "sha256": "f4e3d27d04961b44018f10eca3cfab640673459e9f7cee29f0c0cc35c74972b6",
+    "bytes": 7155323,
+    "parts": [
+      "asset-00-00.bin",
+      "asset-00-01.bin",
+      "asset-00-02.bin",
+      "asset-00-03.bin",
+      "asset-00-04.bin",
+      "asset-00-05.bin",
+      "asset-00-06.bin",
+      "asset-00-07.bin",
+      "asset-00-08.bin",
+      "asset-00-09.bin",
+      "asset-00-10.bin",
+      "asset-00-11.bin",
+      "asset-00-12.bin",
+      "asset-00-13.bin",
+      "asset-00-14.bin",
+      "asset-00-15.bin"
+    ]
+  },
+  {
+    "original_name": "pitch_control_game10517_seq94-ezgif.com-speed.gif",
+    "target": "examples/di-maria-final/sources/pitch-control.gif",
+    "sha256": "9f726bd62200dd7f6cc25093f23d60f2fb3c225518e7b7bb25ba8ec25cba4d41",
+    "bytes": 6169395,
+    "parts": [
+      "asset-01-00.bin",
+      "asset-01-01.bin",
+      "asset-01-02.bin",
+      "asset-01-03.bin",
+      "asset-01-04.bin",
+      "asset-01-05.bin",
+      "asset-01-06.bin",
+      "asset-01-07.bin",
+      "asset-01-08.bin",
+      "asset-01-09.bin",
+      "asset-01-10.bin",
+      "asset-01-11.bin",
+      "asset-01-12.bin",
+      "asset-01-13.bin"
+    ]
+  },
+  {
+    "original_name": "WhatsApp Video 2026-10-25 at 20.20.39 (1).mp4",
+    "target": "examples/di-maria-final/sources/influence-sequence-94.mp4",
+    "sha256": "196346bd61356f2800fb8b49973bfa76abaad1c0d993dd4cc054b6118d1e43d8",
+    "bytes": 625410,
+    "parts": [
+      "asset-02-00.bin",
+      "asset-02-01.bin"
+    ]
+  },
+  {
+    "original_name": "WhatsApp Image 2026-10-25 at 20.20.34.jpeg",
+    "target": "examples/di-maria-final/sources/delta-still.jpeg",
+    "sha256": "3f6a84e374455815ebf3bfc1cab95a9ef09a22ab05e91348771ef3b25467c2a7",
+    "bytes": 69152,
+    "parts": [
+      "asset-03-00.bin"
+    ]
+  },
+  {
+    "original_name": "WhatsApp Image 2026-10-25 at 20.20.39 (1).jpeg",
+    "target": "examples/di-maria-final/sources/control-still.jpeg",
+    "sha256": "d222d629b45d393156659e7eda8f4e0007e4ca07eeac4587dd878eb6b60ca154",
+    "bytes": 51136,
+    "parts": [
+      "asset-04-00.bin"
+    ]
+  },
+  {
+    "original_name": "WhatsApp Image 2026-10-25 at 20.20.39.jpeg",
+    "target": "examples/di-maria-final/sources/influence-still.jpeg",
+    "sha256": "ca46beabe41e951925bf52d903facf5bffa7d1335adfbb8ad2aa3ac2c76b61d9",
+    "bytes": 30141,
+    "parts": [
+      "asset-05-00.bin"
+    ]
+  },
+  {
+    "original_name": "WhatsApp Video 2026-10-25 at 20.20.39.mp4",
+    "target": "examples/supplied-context/sequence-88.mp4",
+    "sha256": "673709a33b299df7a45b7815727df8669d5577ae83697f62fe7bd8bd3316d86c",
+    "bytes": 2920568,
+    "parts": [
+      "asset-06-00.bin",
+      "asset-06-01.bin",
+      "asset-06-02.bin",
+      "asset-06-03.bin",
+      "asset-06-04.bin",
+      "asset-06-05.bin",
+      "asset-06-06.bin"
+    ]
+  },
+  {
+    "original_name": "WhatsApp Video 2026-10-25 at 20.20.39 (2).mp4",
+    "target": "examples/supplied-context/sequence-262.mp4",
+    "sha256": "f5026332df8cc34dc50c1eb95947632eee80e679ed7e2b1a7824e0e008d9c3ee",
+    "bytes": 319903,
+    "parts": [
+      "asset-07-00.bin"
+    ]
+  }
+]

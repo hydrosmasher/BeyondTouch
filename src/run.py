@@ -20,6 +20,7 @@ def main():
     p=argparse.ArgumentParser(description='Run BeyondTouch at 50 Hz. No Python is needed to open START_HERE.html.')
     g=p.add_mutually_exclusive_group();g.add_argument('--case',type=int,choices=range(1,13));g.add_argument('--check',action='store_true');g.add_argument('--all',action='store_true')
     p.add_argument('--workers',type=int,default=2)
+    p.add_argument('--synthetic',action='store_true',help='Run the separate 50 Hz full-model validation fixtures')
     args=p.parse_args()
     if sys.version_info[:2]!=(3,12):
         p.exit(2,'Recalculation needs Python 3.12. To view all saved examples, open START_HERE.html instead.\n')
@@ -32,14 +33,14 @@ def main():
         if version!='3.12':p.exit(2,'The existing .venv is not Python 3.12. Rename it and rerun.\n')
         subprocess.run([str(exe),'-m','pip','install','-r',str(ROOT/'requirements.txt')],check=True)
         return subprocess.call([str(exe),str(Path(__file__).resolve()),*sys.argv[1:]],cwd=ROOT)
-    print('BeyondTouch | Python 3.12 | 50 Hz synthetic tracking',flush=True)
+    print('BeyondTouch | Python 3.12 | '+('50 Hz synthetic validation' if args.synthetic else 'real Premier League cases · native 20 Hz'),flush=True)
     if args.check:
         run(['-m','unittest','discover','-s','src/tests','-v']);return 0
-    out=Path('outputs')/(f'case-{args.case:02d}' if args.case else 'examples')
-    cmd=['src/Scripts/run_example_suite.py','--sample-rate','50','--output',out,'--workers',str(args.workers)]
+    out=Path('outputs')/((f'synthetic-case-{args.case:02d}' if args.case else 'synthetic') if args.synthetic else (f'case-{args.case:02d}' if args.case else 'examples'))
+    cmd=(['src/Scripts/run_example_suite.py','--sample-rate','50','--output',out,'--workers',str(args.workers)] if args.synthetic else ['src/real_cases.py','--output',out])
     if args.case:cmd+=['--case',str(args.case)]
     run(cmd)
-    if not args.case:run(['src/Scripts/verify_example_suite.py','--results',out])
+    if not args.case and args.synthetic:run(['src/Scripts/verify_example_suite.py','--results',out])
     print('\nFinished. Open this gallery in a browser:\n'+str(ROOT/out/'index.html'),flush=True)
     return 0
 

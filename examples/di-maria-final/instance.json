@@ -1,0 +1,68 @@
+{
+  "case_id": "WC-01",
+  "kind": "real_match_rendered_evidence",
+  "match": "Argentina v France",
+  "date": "2022-12-18",
+  "competition": "FIFA World Cup final",
+  "scorer": "Ángel Di María",
+  "shirt_number": 11,
+  "official_goal_minute": 36,
+  "official_context_url": "https://www.fifa.com/en/tournaments/mens/worldcup/articles/argentina-france-2022-final-greatest-games",
+  "supplied_by": "Bassel Hammad via project collaborator",
+  "source_animation": "dimaria_goal_pitch_control_CHANGE-ezgif.com-speed.gif",
+  "source_animation_frames": 120,
+  "source_animation_playback_s": 12,
+  "retained_keyframes": [
+    {
+      "index": 0,
+      "source_time_s": 2111.2,
+      "relative_to_source_goal_s": -9.9,
+      "displayed_max_gain": 0.047,
+      "displayed_max_loss": -0.027,
+      "file": "keyframe-1.png",
+      "sha256": "3881c5dc48755e4408bc80415967cd6f1bb0b9117bde4ebdf6dc3e74a21495de"
+    },
+    {
+      "index": 60,
+      "source_time_s": 2117.2,
+      "relative_to_source_goal_s": -3.9,
+      "displayed_max_gain": 0.314,
+      "displayed_max_loss": -0.185,
+      "file": "keyframe-2.png",
+      "sha256": "43e9a215e121a181aa9968f0e6e62c3343acb5f93272d875d2d1ddbcdd2d3c5d"
+    },
+    {
+      "index": 119,
+      "source_time_s": 2123.1,
+      "relative_to_source_goal_s": 2.0,
+      "displayed_max_gain": 0.209,
+      "displayed_max_loss": -0.145,
+      "file": "keyframe-3.png",
+      "sha256": "60dd0dde90a125fe0ff340e22cd5737036b1145217b8a35760811d19572a7ea1"
+    }
+  ],
+  "raw_tracking_available": false,
+  "source_tracking_hz": null,
+  "source_delta_definition_verified": false,
+  "control_equivalent_area_m2": null,
+  "defender_distance_m": null,
+  "candidate_receiving_window_s": null,
+  "xg": 0.30340916,
+  "player_dot_identity_mapping_available": false,
+  "interpretation": "Displayed extrema of the supplied ΔPC field, manually transcribed and visually checked at three retained frames. They are not total area, xG or exclusive Di María influence. The underlying baseline/differencing definition was not supplied.",
+  "clock_note": "Plot clock and relative goal marker are source annotations, not independently aligned to broadcast time. After-goal frame is context only.",
+  "xg_source": "StatsBomb",
+  "xg_is_shot_context_only": true,
+  "full_supplied_media_available": true,
+  "event_analysis_file": "event-analysis.json",
+  "full_media_manifest": "source-media-manifest.json",
+  "rendered_rank_observation": {
+    "source": "sources/influence-sequence-94.mp4",
+    "displayed_frame": 31,
+    "displayed_source_time_s": 2117.4,
+    "leading_shirt_in_displayed_ranking": 11,
+    "ranking_position": 1,
+    "numeric_area_units_unverified": true,
+    "not_causal_credit": true
+  }
+}

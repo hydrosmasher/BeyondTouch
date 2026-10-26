@@ -1,68 +1,57 @@
-# Run locally
+# View and run BeyondTouch
 
-## Without Python — judges start here
+## Judge demo without Python
 
-Download the repository ZIP from GitHub using **Code → Download ZIP**, extract it,
-then double-click **START_HERE.html**. Choose any of the twelve cards. The interactive
-replays and GIFs work from the extracted folder with no server, account or API key.
-Do not open HTML while it is still inside the ZIP.
+Download **Code → Download ZIP**, extract it, and double-click **START_HERE.html**.
+Start with Di María’s World Cup final evidence, then open the twelve Premier League
+cards. Every case folder has a README analysis and saved animation viewable directly
+on GitHub. No server, account, API key, IDE or installation is needed to view the
+extracted demo. The single upload MP4 and PNG are in uploads/.
 
-On GitHub itself, open an examples folder to read its analysis and watch preview.gif.
-Each folder also includes video.avi. The GIF is the browser-compatible playback
-alternative if your media player does not support Motion-JPEG AVI. Preview exports
-are 5 fps; the interactive replay retains all 301 samples of the 50 Hz tracking.
+The World Cup case presents the full supplied animations, sequence 94 video and
+three annotated checkpoints, with independently sourced shot context. No tracking
+positions are reconstructed from those rendered plots. Premier League cases use educational trajectories and approximate nominal
+distances, not research-grade data.
 
-## macOS / Linux — calculate
-
-Open Terminal in the project folder. On this Mac the checkout is:
+## From the start on this Mac
 
 ```sh
-cd "$HOME/Desktop/BeyondTouch"
-git pull --ff-only
-bash run.sh --check
+cd "$HOME/Desktop/BeyondTouch" && git pull --ff-only && bash run.sh --all && open outputs/examples/index.html
+```
+
+This updates the Git clone and recalculates the twelve **real Premier League cases**.
+To open the saved demo immediately, use `open START_HERE.html` in the project folder.
+The launcher selects Python 3.12, including the existing Codex-bundled runtime on
+this Mac; the default Python 3.15 is not used. Otherwise install Python 3.12 from
+https://www.python.org/downloads/. The launcher installs the pinned NumPy, pandas
+and Pillow versions into .venv when needed. Initial dependency installation needs
+internet; viewing the supplied demo does not.
+
+If Git reports a reference race, let other fetches finish, then use `git fetch origin`
+and `git merge --ff-only origin/main`. Do not reset or delete personal changes. A ZIP
+download is updated by downloading the latest ZIP.
+
+## Calculation options
+
+```sh
 bash run.sh --case 1
-open outputs/case-01/index.html
+bash run.sh --check
+bash run.sh --synthetic --all
 ```
 
-`git pull` applies only to a Git clone. If you downloaded a ZIP, download the latest
-ZIP and replace your extracted copy after preserving any personal changes.
-On Linux, open the printed gallery path with your browser instead of the macOS
-`open` command. First-case calculation takes longer than opening the saved demo.
+`--case 1` writes outputs/case-01/. `--all` writes outputs/examples/.
+`--synthetic --all` runs the separate full-model 50 Hz fixtures into outputs/synthetic/
+and can take several minutes. They are authored validation tests, not match findings.
+The Di María tracking was not supplied; recalculation does not invent new metrics
+for it. Source annotations remain in examples/di-maria-final/evidence.json.
 
-For all twelve cases:
+Linux: open the printed path in your browser instead of using macOS `open`.
+Windows with Python 3.12: `run.bat --all`, `run.bat --case 1`, `run.bat --check`, or
+`run.bat --synthetic --all` from Command Prompt in the extracted folder.
 
-```sh
-bash run.sh --all
-open outputs/examples/index.html
-```
+## Sampling and video
 
-The launcher selects Python 3.12. It can use an existing python3.12 installation or
-the Codex-bundled Python 3.12 runtime on this Mac. A default Python 3.15 installation
-is not used. If neither Python 3.12 runtime exists, install Python 3.12 from
-https://www.python.org/downloads/ and rerun. No IDE or notebook platform is needed.
-The first calculation installs the three pinned dependencies into .venv when the
-selected interpreter does not already have them. That setup needs internet access.
-If installed versions already match, it uses them without installing anything.
-
-Use `--workers 1` to reduce CPU and memory use. Recalculating all twelve runs baseline
-and reference grids and can take several minutes. Generated results go to outputs/;
-saved judge examples stay in examples/.
-
-## Windows
-
-Install Python 3.12, extract the repository, open Command Prompt in that folder:
-
-```bat
-run.bat --check
-run.bat --case 1
-```
-
-Open outputs\case-01\index.html. Use `run.bat --all` for all twelve cases.
-
-## Troubleshooting
-
-If dependencies cannot install, use START_HERE.html to view the supplied results.
-If .venv belongs to another Python version, rename it before rerunning; the launcher
-does not delete it. If an organizational browser blocks local scripts, the case
-README and preview.gif still contain the saved analysis and visual demonstration.
-No GPU, Azure key, FFmpeg, GitHub Desktop or paid service is required.
+Real calculations retain native **20 Hz** samples. Browser positions interpolate
+for **50 Hz display only**; preview GIFs/AVIs are 5 fps. Synthetic fixtures remain
+50 Hz. These are different settings. FFmpeg is only needed to rebuild the optional
+promotional MP4 using `python src/build_upload_video.py`; the ready MP4 is supplied.

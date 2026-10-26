@@ -1,0 +1,22 @@
+{
+  "id": "PL-02",
+  "kind": "real_educational_tracking",
+  "competition": "Premier League",
+  "source_play": "Fulham 0 - [1] Liverpool",
+  "source_case_number": 3,
+  "short_title": "Fulham 0 - 1 Liverpool",
+  "date": "2019-03-17",
+  "scorer": "Sadio Man\u00e9",
+  "goal_minute": 26,
+  "focus_name": "Roberto Firmino",
+  "focus_shirt": 9,
+  "description": "Firmino is the focus during the move ending in Man\u00e9\u2019s opener.",
+  "match_context_url": "https://www.premierleague.com/en/news/1088244/match-summary",
+  "source_url": "https://github.com/Friends-of-Tracking-Data-FoTD/Last-Row",
+  "source_native_hz": 20,
+  "source_git_blob_sha": "77e053fba2f9569a60cd41d87a817bee0028c2c2",
+  "tracking_sha256": "a6f9a1cb1df686fc94111c8be31b88eafedf7917d92d31b581b39036091db0e6",
+  "clock_note": "Source-relative clip time only; no event-synchronized pass-release or goal frame is supplied.",
+  "fixture_mapping_note": "Match context inferred from source play label, 2019 collection and known Liverpool shirt identities, corroborated with linked official reports. Exact frame-to-broadcast synchronization is unavailable.",
+  "source_warning": "Ricardo Tavares / Last Row describes these as educational animations with incomplete player coverage and insufficient research accuracy."
+}

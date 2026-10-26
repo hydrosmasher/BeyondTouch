@@ -1,0 +1,45 @@
+BEYONDTOUCH — PROJECT INFO AND EXECUTION
+
+Purpose
+Explain football movement using a replay, source evidence and quantitative
+metrics. Main demo: Di Maria's World Cup final goal plus 12 real Premier
+League sequences. Twelve synthetic cases remain separate validation tests.
+
+What is new
+Other observed players and the ball move in the conditional model comparison.
+Only the selected focus player's state changes in the reference scene.
+Di Maria shot context: StatsBomb xG 0.30340916, five completed passes,
+9.757 seconds from first recorded pass to shot. Shot xG is not run credit.
+
+JUDGES — NO PYTHON OR INSTALLATION NEEDED
+1. Download the project ZIP and extract it.
+2. Double-click START_HERE.html.
+3. Open Di Maria's case, then any Premier League card.
+Each case includes video/animation, analysis, provenance and available metrics.
+Single submission files: uploads/BeyondTouch-DiMaria.mp4 and .png.
+
+DEVELOPERS — COPY INTO TERMINAL ON THIS MAC
+cd "$HOME/Desktop/BeyondTouch"
+git pull --ff-only
+bash run.sh --all
+open outputs/examples/index.html
+
+Other commands
+bash run.sh --case 1             One real case
+bash run.sh --check              Tests
+bash run.sh --synthetic --all    Separate synthetic full-model validation
+Windows: run.bat --all (or the same options) with Python 3.12 installed.
+The launcher selects Python 3.12 and sets up pinned dependencies when needed.
+
+READ THE NUMBERS CORRECTLY
+Premier League source: Last Row / Ricardo Tavares, educational partial tracking
+at 20 Hz. Distances are approximate under assumed 105 x 68 m scaling.
+The browser's 50 Hz interpolation does not add real measurements.
+Moving-scene area is conditional model sensitivity, not causal match impact.
+Di Maria source plots lack raw tracking; displayed extrema are annotations.
+StatsBomb event clocks are not aligned to Basel's plot clock.
+
+Folders: examples/ (cases), guide/ (report and definitions), src/ (code/tests).
+Sources: Bassel Hammad and coauthors; LaurieOnTracking/Friends of Tracking;
+Ricardo Tavares/Last Row; StatsBomb (credited derived event analysis).
+Generative explanations are planned; current summaries are deterministic.

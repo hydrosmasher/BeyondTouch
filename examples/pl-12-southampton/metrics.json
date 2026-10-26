@@ -1,0 +1,112 @@
+{
+  "schema_version": "real-observed-1",
+  "source_native_hz": 20,
+  "display_hz": 50,
+  "display_interpolation_only": true,
+  "sample_count": 257,
+  "duration_s": 12.8,
+  "focus_player_id": 15,
+  "focus_shirt": 11,
+  "focus_name": "Mohamed Salah",
+  "coordinate_assumption": {
+    "input": "0\u2013100 normalized pitch axes",
+    "assumed_length_m": 105,
+    "assumed_width_m": 68,
+    "actual_pitch_calibration_verified": false
+  },
+  "focus_path_nominal_m": 77.78255234917083,
+  "focus_displacement_nominal_m": 68.59330136494397,
+  "directness_ratio": 0.8818597396627494,
+  "nearest_observed_defender_start_nominal_m": 6.626732815139422,
+  "nearest_observed_defender_end_nominal_m": 0.29830255772929276,
+  "nearest_observed_defender_min_nominal_m": 0.29830255772929276,
+  "nearest_observed_defender_max_nominal_m": 13.288181368986757,
+  "separation_at_least_3m_s": 9.25,
+  "separation_time_is_receiving_window": false,
+  "associated_defenders": [
+    {
+      "source_player_id": 12666,
+      "observed_path_nominal_m": 69.01657348193035,
+      "initial_gap_nominal_m": 6.626732815139422
+    },
+    {
+      "source_player_id": 15145,
+      "observed_path_nominal_m": 83.47741588718563,
+      "initial_gap_nominal_m": 8.546759744570577
+    }
+  ],
+  "associated_defender_path_sum_nominal_m": 152.49398936911598,
+  "coverage": {
+    "observed_attackers": 8,
+    "observed_defenders": 9,
+    "complete_22_player_tracking": false,
+    "research_accuracy_verified": false
+  },
+  "control_equivalent_area_m2": null,
+  "candidate_receiving_window_s": null,
+  "xg": null,
+  "missing_metrics_reason": "Educational source warns of incomplete player coverage and insufficient research accuracy; full pitch control, onside eligibility and xG are not asserted.",
+  "selection_rule": "Up to two observed defenders within 10 nominal metres at source clip start; no goalkeeper identification or causal assignment.",
+  "dynamic_scene_sensitivity": {
+    "schema_version": "moving-scene-1",
+    "method": "actual_endpoint_minus_same_endpoint_with_only_focus_state_held_at_source_start",
+    "source_frame_time_s": 12.8,
+    "focus_source_id": 15,
+    "focus_model_id": "Home_15",
+    "all_other_players_use_actual_endpoint_state": true,
+    "ball_uses_actual_endpoint_position": true,
+    "only_focus_reference_time_s": 0.0,
+    "focus_reference_state": "first observed position AND velocity",
+    "is_causal_effect": false,
+    "is_full_match_pitch_control": false,
+    "domain": "whole nominal pitch",
+    "area": {
+      "gained_m2": 57.17216292337696,
+      "lost_m2": 2.9087299209491513,
+      "net_m2": 54.2634330024278
+    },
+    "grid": {
+      "columns": 50,
+      "rows": 32,
+      "cell_area_m2": 4.4625
+    },
+    "assumptions": [
+      "105 \u00d7 68 m nominal scaling; actual calibration unverified.",
+      "Only observed players are included; missing players are not invented.",
+      "Goalkeeper identity is unconfirmed, so observed actors use generic outfield model parameters.",
+      "Offside filtering is disabled because reliable complete offside state is unavailable.",
+      "The focus reference is an artificial model-state contrast; ball and other players do not react to it.",
+      "Result is a conditional model sensitivity, not real-match causal credit, xG or physical space ownership."
+    ],
+    "numerical_sensitivity": {
+      "reference_grid_columns": 75,
+      "reference_net_m2": 54.22304830383625,
+      "absolute_difference_m2": 0.04038469859155214,
+      "tolerance_m2": 3.0,
+      "within_declared_tolerance": true,
+      "meaning": "Grid stability only; does not resolve source inaccuracy or missing players."
+    }
+  },
+  "instance": {
+    "id": "PL-12",
+    "kind": "real_educational_tracking",
+    "competition": "Premier League",
+    "source_play": "Southampton 1 - [2] Liverpool",
+    "source_case_number": 19,
+    "short_title": "Southampton 1 - 2 Liverpool",
+    "date": "2019-04-05",
+    "scorer": "Mohamed Salah",
+    "goal_minute": 80,
+    "focus_name": "Mohamed Salah",
+    "focus_shirt": 11,
+    "description": "Salah\u2019s run and carry before Liverpool take a 2\u20131 lead. This clip includes on-ball movement.",
+    "match_context_url": "https://www.premierleague.com/en/news/1157086",
+    "source_url": "https://github.com/Friends-of-Tracking-Data-FoTD/Last-Row",
+    "source_native_hz": 20,
+    "source_git_blob_sha": "77e053fba2f9569a60cd41d87a817bee0028c2c2",
+    "tracking_sha256": "ad0effd364fa40a1b6e9c0fc5b9eb2386524b40dce99b0f52199c414a7f3fcd8",
+    "clock_note": "Source-relative clip time only; no event-synchronized pass-release or goal frame is supplied.",
+    "fixture_mapping_note": "Match context inferred from source play label, 2019 collection and known Liverpool shirt identities, corroborated with linked official reports. Exact frame-to-broadcast synchronization is unavailable.",
+    "source_warning": "Ricardo Tavares / Last Row describes these as educational animations with incomplete player coverage and insufficient research accuracy."
+  }
+}
