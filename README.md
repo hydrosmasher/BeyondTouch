@@ -12,7 +12,7 @@ The case READMEs also show animations and analysis directly on GitHub. The extra
 
 ## Featured real match
 
-[Ángel Di María · Argentina v France · 2022 World Cup final](examples/di-maria-final) includes Basel’s retained rendered evidence and source-annotated ΔPC values. The full supplied animations are included, plus independently sourced StatsBomb shot context: 0.3034 xG, five completed passes and 9.757 s from first pass to shot. Shot context is not run credit. [One upload video](uploads/BeyondTouch-DiMaria.mp4) · [One upload picture](uploads/BeyondTouch-DiMaria.png).
+[Ángel Di María · Argentina v France · 2022 World Cup final](examples/di-maria-final) includes Basel’s retained rendered evidence and source-annotated ΔPC values. The full supplied animations are included, plus independently sourced StatsBomb shot context: 0.3034 xG, five completed passes and 9.757 s from first pass to shot. Shot context is not run credit. [One upload video](uploads/BeyondTouch-Liverpool-50fps.mp4) · [One upload picture](uploads/BeyondTouch-Liverpool.png).
 
 ## Twelve real Premier League sequences
 
@@ -60,3 +60,7 @@ StatsBomb event analysis is credited with its logo in the featured case. Only de
 ## Explain a sequence
 
 Each Liverpool case now has `story.json` with five explanation steps and explicit candidate/not-detected statuses. Gold RUN, orange D1, cyan D2 and purple FIN paths are observed trajectories. The story rule finds six covering candidates and no complete finisher chain in the twelve current clips. This distinction is exposed rather than turning correlation into a causal goal explanation. The [developer guide](guide/DEVELOPER_GUIDE.md#judge-walkthrough-from-video-to-explanation) explains the entire input → metrics → rules/model → explanation → video pipeline and includes judge questions.
+
+## Submission media
+
+Use the Liverpool–Everton [50 fps video](uploads/BeyondTouch-Liverpool-50fps.mp4) and [matching picture](uploads/BeyondTouch-Liverpool.png). This is interpolated presentation of 20 Hz educational tracking, with half-speed playback for readability. It is not 50 Hz captured tracking. [Media details](uploads/README.md).
