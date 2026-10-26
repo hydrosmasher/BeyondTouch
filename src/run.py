@@ -1,4 +1,4 @@
-"""One entry point for dependency setup, tests and the 50 Hz example suite."""
+"""One entry point for real cases, dependency setup and separate synthetic tests."""
 import argparse
 import importlib.metadata
 from pathlib import Path
@@ -17,7 +17,7 @@ def run(args):
     subprocess.run([sys.executable,*map(str,args)],cwd=ROOT,check=True)
 
 def main():
-    p=argparse.ArgumentParser(description='Run BeyondTouch at 50 Hz. No Python is needed to open START_HERE.html.')
+    p=argparse.ArgumentParser(description='Recalculate real Premier League cases. No Python is needed to open START_HERE.html.')
     g=p.add_mutually_exclusive_group();g.add_argument('--case',type=int,choices=range(1,13));g.add_argument('--check',action='store_true');g.add_argument('--all',action='store_true')
     p.add_argument('--workers',type=int,default=2)
     p.add_argument('--synthetic',action='store_true',help='Run the separate 50 Hz full-model validation fixtures')
