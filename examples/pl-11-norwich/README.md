@@ -34,3 +34,19 @@ From the repository root: `bash run.sh --case 11` or `run.bat --case 11`. This r
 ## Moving-scene model contrast
 
 Conditional endpoint sensitivity: **-40.65 nominal m²** over the whole pitch. All other observed players and the ball use their actual endpoint states; only the focus player is held at its initial position and velocity in the reference. This does not freeze unrelated players. It remains a partial-coverage model diagnostic, not causal or complete-match attribution. Offside/GK identities are unconfirmed. See model-analysis.json.
+
+## Tactical story: run, response, cover, finish
+
+Watch Jordan Henderson first, then the highlighted defender movements. A nearby defender moves with the run and a second defender later approaches the first defender’s earlier position. The goal is by Virgil van Dijk; the full space-creation link remains unconfirmed. Present this as a limited case, not a proven chain.
+
+**1 · The attacking movement [observed]** — Jordan Henderson covers approximately 25.68 nominal metres across this clip. The source does not label an off-ball-only interval.
+
+**2 · Defender response [candidate]** — Between 0.50–2.00 s, observed defender D19901 moves 5.35 nominal m in a similar direction to the focus; their gap changes from 9.01 to 11.07 nominal m. This is a candidate tracking response, not proof of attraction.
+
+**3 · The covering movement [candidate]** — After that response, observed defender D19902 moves 2.12 nominal m closer to the first defender’s earlier location (2.00–3.50 s). This is a geometric covering candidate; no marking responsibility is supplied.
+
+**4 · Space and the finisher [not_established]** — At the covering defender’s earlier location, nearest-observed-defender clearance changes from 0.00 to 6.22 nominal m. The complete link from this location to the finisher is not supported by the declared rule.
+
+**5 · Goal context [context]** — The match context identifies Virgil van Dijk as the scorer at 28′. The source clip has no synchronized shot marker, so this does not validate the preceding causal chain.
+
+See story.json for thresholds, selected source IDs and exact timestamps. Arrows and trails show observed motion; tactical responsibilities remain unconfirmed.

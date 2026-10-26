@@ -22,7 +22,7 @@ def check_avi(path):
 def verify():
     cases=sorted((ROOT/'examples').glob('pl-[0-9][0-9]-*'));assert len(cases)==12
     for c in cases:
-        required=['README.md','replay.html','data.js','metrics.json','evidence.csv','instance.json','tracking.csv.gz','model.js','model-analysis.json','preview.gif','preview.png','video.avi']
+        required=['README.md','replay.html','data.js','metrics.json','evidence.csv','instance.json','tracking.csv.gz','story.json','story.js','model.js','model-analysis.json','preview.gif','preview.png','video.avi']
         assert all((c/n).is_file() for n in required),c
         m=json.loads((c/'metrics.json').read_text());b=json.loads((c/'data.js').read_text().split('=',1)[1].rstrip(';\n'))
         recomputed,*_=calculate(pd.read_csv(c/'tracking.csv.gz'),m['focus_shirt'])
@@ -33,6 +33,10 @@ def verify():
         dm=json.loads((c/'model-analysis.json').read_text());assert dm['all_other_players_use_actual_endpoint_state'] and dm['ball_uses_actual_endpoint_position']
         assert not dm['is_causal_effect'] and not dm['is_full_match_pitch_control']
         assert math.isclose(dm['area']['gained_m2']-dm['area']['lost_m2'],dm['area']['net_m2'],abs_tol=1e-8)
+        from tactical_chain import build as build_story
+        story=json.loads((c/'story.json').read_text());assert story==build_story(b)
+        assert story['causal_attraction_established'] is False
+        if b.get('story_video_available'):assert (c/'story.mp4').read_bytes()[4:8]==b'ftyp'
         assert not m['coverage']['research_accuracy_verified']
         assert len(b['frames'])==m['sample_count']==len(b['evidence'])
         assert all(math.isclose(y['t']-x['t'],.05,abs_tol=1e-8) for x,y in zip(b['frames'],b['frames'][1:]))

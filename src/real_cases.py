@@ -80,12 +80,9 @@ def calculate(df,focus_number):
     return metrics,roster,replay,evidence
 
 def font(size):
-    for name in ['/System/Library/Fonts/Supplemental/Arial.ttf','/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf']:
-        try:return ImageFont.truetype(name,size)
-        except OSError:pass
-    return ImageFont.load_default()
+    return ImageFont.load_default(size=size)
 
-def picture(bundle,index):
+def base_picture(bundle,index):
     m=bundle['metrics'];f=bundle['frames'][index];im=Image.new('RGB',(1120,760),'#0c1820');d=ImageDraw.Draw(im)
     d.text((28,18),'BEYONDTOUCH / Premier League movement',font=font(27),fill='white')
     d.text((28,58),bundle['instance']['short_title']+' | '+bundle['instance']['date'],font=font(16),fill='#baccca')
@@ -110,14 +107,20 @@ def picture(bundle,index):
     d.text((30,719),'Partial coverage · illustrative measurements · no xG or causal defender attribution',font=font(15),fill='#baccca')
     return im
 
+def picture(bundle,index):
+    base=base_picture(bundle,index)
+    if 'story' not in bundle:return base
+    from story_media import render
+    return render(base,bundle,index)
+
 def avi(frames,path):
     pack=lambda *x:struct.pack('<'+'I'*len(x),*x)
     def chunk(tag,b):return tag+pack(len(b))+b+(b'\0' if len(b)%2 else b'')
     def listing(tag,b):return chunk(b'LIST',tag+b)
     data=[]
     for f in frames:
-        b=io.BytesIO();f.resize((784,532)).save(b,format='JPEG',quality=65);data.append(b.getvalue())
-    w,h,fps=784,532,5;big=max(map(len,data));avih=pack(200000,big*fps,0,16,len(data),0,1,big,w,h,0,0,0,0)
+        b=io.BytesIO();f.resize((784,700)).save(b,format='JPEG',quality=65);data.append(b.getvalue())
+    w,h,fps=784,700,5;big=max(map(len,data));avih=pack(200000,big*fps,0,16,len(data),0,1,big,w,h,0,0,0,0)
     sh=struct.pack('<4s4sIHHIIIIIIIIhhhh',b'vids',b'MJPG',0,0,0,0,1,fps,0,len(data),big,0xffffffff,0,0,0,w,h)
     sf=struct.pack('<IiiHH4sIiiII',40,w,h,1,24,b'MJPG',w*h*3,0,0,0,0)
     hd=listing(b'hdrl',chunk(b'avih',avih)+listing(b'strl',chunk(b'strh',sh)+chunk(b'strf',sf)));mov=b'';ix=b'';off=4
@@ -144,7 +147,11 @@ def generate(case_number,output,with_model=True):
         m['dynamic_scene_sensitivity']={k:v for k,v in dynamic.items() if k not in ['surface','x','y']}
     else:dynamic=None
     m['instance']=instance;bundle={'instance':instance,'metrics':m,'roster':roster,'frames':frames,'evidence':evidence}
+    from tactical_chain import build as build_story
+    bundle['story']=build_story(bundle)
     output.mkdir(parents=True,exist_ok=True)
+    (output/'story.json').write_text(json.dumps(bundle['story'],indent=2,allow_nan=False))
+    (output/'story.js').write_text('window.TACTICAL_STORY='+json.dumps(bundle['story'],separators=(',',':'),allow_nan=False).replace('<','\\u003c')+';')
     (output/'metrics.json').write_text(json.dumps(m,indent=2,allow_nan=False));(output/'instance.json').write_text(json.dumps(instance,indent=2))
     (output/'data.js').write_text('window.REAL_CASE='+json.dumps(bundle,separators=(',',':'),allow_nan=False).replace('<','\\u003c')+';')
     (output/'model.js').write_text('window.DYNAMIC_MODEL='+json.dumps(dynamic,separators=(',',':'),allow_nan=False)+';')
@@ -155,6 +162,9 @@ def generate(case_number,output,with_model=True):
     pictures=[picture(bundle,i) for i in range(0,len(frames),4)]
     pictures[0].save(output/'preview.gif',save_all=True,append_images=pictures[1:],duration=200,loop=0,optimize=True)
     picture(bundle,len(frames)//2).save(output/'preview.png');avi(pictures,output/'video.avi')
+    from refresh_stories import encode_mp4
+    bundle['story_video_available']=encode_mp4(output)
+    (output/'data.js').write_text('window.REAL_CASE='+json.dumps(bundle,separators=(',',':'),allow_nan=False).replace('<','\\u003c')+';')
     ds=m['associated_defender_path_sum_nominal_m'];dtext='not selected' if ds is None else f'≈ {ds:.2f} m'
     text=f'''# {instance['id']} · {instance['short_title']}
 
@@ -162,7 +172,7 @@ def generate(case_number,output,with_model=True):
 
 ![Replay](preview.gif)
 
-[Video](video.avi) · [Interactive replay](replay.html) after extracting the repository
+[Annotated video](video.avi) · [Interactive replay](replay.html) after extracting the repository
 
 {date} · goal context: {scorer}, {minute}′. [Official match context]({link}). Source play label: `{instance['source_play']}`. Focus: **{m['focus_name']} #{shirt}**, local source ID **{m['focus_player_id']}**. {description}
 
@@ -189,6 +199,7 @@ The native samples remain 20 Hz. The browser interpolates positions for a 50 Hz 
 
 From the repository root: `bash run.sh --case {case_number}` or `run.bat --case {case_number}`. This recalculates the real-data measurements. Synthetic pitch-control tests remain available separately.
 '''
+    text+='\n## Tactical story: run, response, cover, finish\n\n'+bundle['story']['presentation_text']+'\n\n'+'\n\n'.join('**'+step['title']+' ['+step['status']+']** — '+step['text'] for step in bundle['story']['steps'])+'\n\nExact selection rules, times and player IDs: story.json. These are geometric candidates, not learned or causal defender assignments.\n'
     (output/'README.md').write_text(text)
     if dynamic:
         with (output/'README.md').open('a') as f:f.write(f"\n## Moving-scene model contrast\n\nConditional endpoint sensitivity: **{dynamic['area']['net_m2']:+.2f} nominal m²** over the whole pitch. All other observed players and the ball use their actual endpoint states; only the focus player is held at its initial position and velocity in the reference. This does not freeze unrelated players. It remains a partial-coverage model diagnostic, not causal or complete-match attribution. Offside/GK identities are unconfirmed. See model-analysis.json.\n")

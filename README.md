@@ -1,6 +1,6 @@
 # BeyondTouch
 
-**The numbers behind the run.** Real football events, replayable evidence and transparent movement metrics.
+**The numbers behind the run.** Follow the run, defender-response candidate, covering candidate and finisher with coloured paths, direction arrows and auditable story cards. Real football events, replayable evidence and transparent movement metrics.
 
 ## Judges start here — no Python needed
 
@@ -56,3 +56,7 @@ Research foundation: Bassel Hammad, Mahmoud Nasr, Omar Refaat, Mohamed Hafez and
 Existing MIT notices cover the retained code as stated in LICENSE; third-party data and supplied visualizations retain their own provenance. The project does not claim real-match causal player credit, calibrated xG or VAR compatibility. Explanations are deterministic; a generative service is not connected. [Project board](https://github.com/users/hydrosmasher/projects/2).
 
 StatsBomb event analysis is credited with its logo in the featured case. Only derived analysis is included, not raw event redistribution. See guide/STATSBOMB_LICENSE.pdf.
+
+## Explain a sequence
+
+Each Liverpool case now has `story.json` with five explanation steps and explicit candidate/not-detected statuses. Gold RUN, orange D1, cyan D2 and purple FIN paths are observed trajectories. The story rule finds six covering candidates and no complete finisher chain in the twelve current clips. This distinction is exposed rather than turning correlation into a causal goal explanation. The [developer guide](guide/DEVELOPER_GUIDE.md#judge-walkthrough-from-video-to-explanation) explains the entire input → metrics → rules/model → explanation → video pipeline and includes judge questions.

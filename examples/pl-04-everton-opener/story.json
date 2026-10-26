@@ -1,0 +1,114 @@
+{
+  "schema_version": "tactical-chain-1",
+  "method": "transparent_geometric_candidate_rules",
+  "learned_model": false,
+  "causal_attraction_established": false,
+  "full_candidate_chain_detected": false,
+  "source_native_hz": 20,
+  "coordinate_units": "nominal metres, assumed 105 x 68 m",
+  "thresholds": {
+    "response_window_s": 1.5,
+    "cover_window_s": 1.5,
+    "minimum_focus_displacement_m": 3.0,
+    "minimum_defender_displacement_m": 2.0,
+    "maximum_initial_focus_gap_m": 12.0,
+    "maximum_final_focus_gap_m": 12.0,
+    "minimum_direction_cosine": 0.5,
+    "minimum_cover_approach_m": 2.0,
+    "maximum_cover_anchor_gap_m": 8.0,
+    "minimum_opening_m": 2.0,
+    "maximum_finisher_anchor_gap_m": 10.0
+  },
+  "selection": "earliest qualifying response window, nearest initial defender; then earliest later cover, nearest anchor at cover end",
+  "focus_player_id": 13,
+  "finisher_player_id": 913,
+  "response": {
+    "player_id": 9940,
+    "label": "observed defender D9940",
+    "start_index": 0,
+    "end_index": 30,
+    "start_s": 0.0,
+    "end_s": 1.5,
+    "focus_displacement_nominal_m": 10.844179712029321,
+    "defender_displacement_nominal_m": 8.798575026162544,
+    "initial_focus_gap_nominal_m": 6.748792111993148,
+    "final_focus_gap_nominal_m": 10.4479464780005,
+    "direction_cosine": 0.9411195367239854,
+    "anchor_nominal_xy": [
+      79.43855,
+      32.41589
+    ]
+  },
+  "cover": {
+    "player_id": 15029,
+    "label": "observed defender D15029",
+    "start_index": 30,
+    "end_index": 60,
+    "start_s": 1.5,
+    "end_s": 3.0,
+    "anchor_nominal_xy": [
+      79.43855,
+      32.41589
+    ],
+    "anchor_gap_before_nominal_m": 7.0526470516455095,
+    "anchor_gap_after_nominal_m": 3.6502824874912427,
+    "approach_nominal_m": 3.402364564154267,
+    "vacated_anchor_nominal_xy": [
+      85.75433,
+      29.2773
+    ]
+  },
+  "opening": {
+    "start_s": 1.5,
+    "end_s": 3.0,
+    "anchor_nominal_xy": [
+      85.75433,
+      29.2773
+    ],
+    "nearest_observed_defender_before_nominal_m": 2.0615528110505483e-06,
+    "nearest_observed_defender_after_nominal_m": 5.915338369783188,
+    "gap_increase_nominal_m": 5.915336308230377,
+    "opening_threshold_met": true,
+    "finisher_player_id": 913,
+    "finisher_arrival": {
+      "time_s": 3.0,
+      "minimum_anchor_gap_nominal_m": 37.10761168676852,
+      "approach_after_cover_nominal_m": 0.0,
+      "same_zone_entry_supported": false
+    }
+  },
+  "steps": [
+    {
+      "title": "1 \u00b7 The attacking movement",
+      "status": "observed",
+      "time_s": 0.0,
+      "text": "Sadio Man\u00e9 covers approximately 54.88 nominal metres across this clip. The source does not label an off-ball-only interval."
+    },
+    {
+      "title": "2 \u00b7 Defender response",
+      "status": "candidate",
+      "time_s": 0.0,
+      "text": "Between 0.00\u20131.50 s, observed defender D9940 moves 8.80 nominal m in a similar direction to the focus; their gap changes from 6.75 to 10.45 nominal m. This is a candidate tracking response, not proof of attraction."
+    },
+    {
+      "title": "3 \u00b7 The covering movement",
+      "status": "candidate",
+      "time_s": 1.5,
+      "text": "After that response, observed defender D15029 moves 3.40 nominal m closer to the first defender\u2019s earlier location (1.50\u20133.00 s). This is a geometric covering candidate; no marking responsibility is supplied."
+    },
+    {
+      "title": "4 \u00b7 Space and the finisher",
+      "status": "not_established",
+      "time_s": null,
+      "text": "At the covering defender\u2019s earlier location, nearest-observed-defender clearance changes from 0.00 to 5.92 nominal m. The complete link from this location to the finisher is not supported by the declared rule."
+    },
+    {
+      "title": "5 \u00b7 Goal context",
+      "status": "context",
+      "time_s": null,
+      "text": "The match context identifies Divock Origi as the scorer at 6\u2032. The source clip has no synchronized shot marker, so this does not validate the preceding causal chain."
+    }
+  ],
+  "presentation_text": "Watch Sadio Man\u00e9 first, then the highlighted defender movements. A nearby defender moves with the run and a second defender later approaches the first defender\u2019s earlier position. The goal is by Divock Origi; the full space-creation link remains unconfirmed. Present this as a limited case, not a proven chain.",
+  "warning": "Partial educational tracking; ball/marking intent and event-synchronized shot time unavailable. Absence of a detected pattern is not proof of its absence in the match."
+}

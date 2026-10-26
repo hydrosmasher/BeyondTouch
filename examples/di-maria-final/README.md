@@ -37,3 +37,9 @@ Source: [StatsBomb open data](https://github.com/hudl/open-data), match 3869685.
 ## Complete supplied media
 
 [ΔPC animation](sources/pitch-control-change.gif) · [Control animation](sources/pitch-control.gif) · [Sequence 94 ranking video](sources/influence-sequence-94.mp4). Source checksums are in source-media-manifest.json. The other supplied videos show sequences 88 and 262; they are kept separately under supplied-context and are not labelled as this goal.
+
+## Tactical story and defender arrows
+
+The independently sourced event chain is Molina → Mac Allister → Messi → Álvarez → Mac Allister → Di María: five completed passes in 9.757 s before the recorded shot. Di María’s shot has provider xG 0.30340916. These event observations do not establish which defender was attracted, who covered, or which run caused the finish.
+
+The original supplied animations remain intact. No raw defender trajectories or reliable player-dot mapping are available here, so identity-specific arrows are not added to this case. The new Liverpool story videos use their actual observed trajectories for those overlays.

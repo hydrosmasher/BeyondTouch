@@ -34,3 +34,19 @@ From the repository root: `bash run.sh --case 2` or `run.bat --case 2`. This rec
 ## Moving-scene model contrast
 
 Conditional endpoint sensitivity: **-183.74 nominal m²** over the whole pitch. All other observed players and the ball use their actual endpoint states; only the focus player is held at its initial position and velocity in the reference. This does not freeze unrelated players. It remains a partial-coverage model diagnostic, not causal or complete-match attribution. Offside/GK identities are unconfirmed. See model-analysis.json.
+
+## Tactical story: run, response, cover, finish
+
+Watch Roberto Firmino first, then the highlighted defender movements. A nearby defender moves in a similar direction, but a subsequent cover is not detected. The goal is by Sadio Mané; the full space-creation link remains unconfirmed. Present this as a limited case, not a proven chain.
+
+**1 · The attacking movement [observed]** — Roberto Firmino covers approximately 49.70 nominal metres across this clip. The source does not label an off-ball-only interval.
+
+**2 · Defender response [candidate]** — Between 0.00–1.50 s, observed defender D8978 moves 6.63 nominal m in a similar direction to the focus; their gap changes from 4.84 to 3.79 nominal m. This is a candidate tracking response, not proof of attraction.
+
+**3 · The covering movement [not_detected]** — No later defender meets the covering rule. A second covering defender must not be invented.
+
+**4 · Space and the finisher [not_established]** — The full run → response → cover → finisher chain is not established for this source clip.
+
+**5 · Goal context [context]** — The match context identifies Sadio Mané as the scorer at 26′. The source clip has no synchronized shot marker, so this does not validate the preceding causal chain.
+
+See story.json for thresholds, selected source IDs and exact timestamps. Arrows and trails show observed motion; tactical responsibilities remain unconfirmed.
