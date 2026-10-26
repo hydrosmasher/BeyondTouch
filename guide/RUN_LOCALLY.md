@@ -55,3 +55,10 @@ Real calculations retain native **20 Hz** samples. Browser positions interpolate
 for **50 Hz display only**; preview GIFs/AVIs are 5 fps. Synthetic fixtures remain
 50 Hz. These are different settings. FFmpeg is only needed to rebuild the optional
 promotional MP4 using `python src/build_upload_video.py`; the ready MP4 is supplied.
+
+## Current submission pair
+
+Use uploads/BeyondTouch-Liverpool-50fps.mp4 and uploads/BeyondTouch-Liverpool.png.
+The MP4 is 1920×1080 at 50 fps; source positions remain 20 Hz. Interpolation occurs
+before rendering, and playback is half source speed. Rebuild it with the optional
+imageio-ffmpeg==0.6.0 dependency and `python src/build_submission_50fps.py`.

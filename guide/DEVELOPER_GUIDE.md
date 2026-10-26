@@ -108,7 +108,8 @@ bash run.sh --synthetic --all
 ```
 
 Real calculations preserve 20 Hz samples. Synthetic inputs are 50 Hz. GIF/AVI
-previews and the submission MP4 are 5 fps. Model numerical integration is 0.02 s.
+previews and case story MP4s are 5 fps. The primary Liverpool submission MP4 is
+50 fps with interpolated positions and half-speed playback. Model numerical integration is 0.02 s.
 These settings are independent. A default Python 3.15 installation is not used;
 the launcher selects the tested Python 3.12 runtime and pinned dependencies.
 
@@ -289,3 +290,7 @@ The video is a visualization of these outputs, not the model's raw input.
 | Can you claim all goals prove the full chain? | No. None of the twelve passes the complete declared chain rule; the demo exposes incomplete links. |
 | Where does xG come from? | StatsBomb's independently attributed Di María shot context; it is not off-ball credit or a model trained here. |
 | What would improve accuracy? | Complete calibrated tracking, synchronized possession/shot events, expert-labelled responses and held-out validation of both detections and explanations. |
+
+## Primary 50 fps submission renderer
+
+`src/build_submission_50fps.py` renders Liverpool–Everton directly from the native 20 Hz replay positions using linear interpolation before drawing each output frame. It produces a 27-second, 1920×1080 H.264 video at 50 fps plus a matching picture. Playback is half source speed, with opening and closing holds. Metrics and tactical rule results remain based on the original source samples. This does not establish 50 Hz captured tracking or VAR compatibility. `uploads/Liverpool-50fps-metadata.json` records cadence, frame count, source hash and output hash. Optional dependency: imageio-ffmpeg==0.6.0.

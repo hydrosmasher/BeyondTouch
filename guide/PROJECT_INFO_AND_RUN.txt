@@ -19,7 +19,7 @@ JUDGES — NO PYTHON OR INSTALLATION NEEDED
 2. Double-click START_HERE.html.
 3. Open Di Maria's case, then any Premier League card.
 Each case includes video/animation, analysis, provenance and available metrics.
-Single submission files: uploads/BeyondTouch-DiMaria.mp4 and .png.
+Single submission files: uploads/BeyondTouch-Liverpool-50fps.mp4 and BeyondTouch-Liverpool.png.
 
 DEVELOPERS — COPY INTO TERMINAL ON THIS MAC
 cd "$HOME/Desktop/BeyondTouch"
@@ -37,7 +37,8 @@ The launcher selects Python 3.12 and sets up pinned dependencies when needed.
 READ THE NUMBERS CORRECTLY
 Premier League source: Last Row / Ricardo Tavares, educational partial tracking
 at 20 Hz. Distances are approximate under assumed 105 x 68 m scaling.
-The browser's 50 Hz interpolation does not add real measurements.
+The browser's 50 Hz interpolation does not add real measurements. The primary
+Liverpool submission MP4 is 50 fps, with interpolated positions and half-speed playback.
 Moving-scene area is conditional model sensitivity, not causal match impact.
 Di Maria source plots lack raw tracking; displayed extrema are annotations.
 StatsBomb event clocks are not aligned to Basel's plot clock.
