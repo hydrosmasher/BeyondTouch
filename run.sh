@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+export BEYONDTOUCH_LAUNCH_DIR="$PWD"
 cd "$(dirname "$0")"
 if [[ -n "${BEYONDTOUCH_PYTHON:-}" ]]; then
     task_python="$BEYONDTOUCH_PYTHON"

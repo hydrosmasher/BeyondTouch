@@ -1,0 +1,15 @@
+{
+  "case_id": "MY-SEQUENCE-001",
+  "match_title": "My match / selected run",
+  "source_name": "Replace with the tracking provider or data collector",
+  "native_hz": 50,
+  "pitch_length_m": 105,
+  "pitch_width_m": 68,
+  "coordinates": "metres",
+  "origin": "bottom_left",
+  "attack_direction": "right",
+  "focus_player_id": "A10",
+  "finisher_player_id": null,
+  "date": "not supplied",
+  "description": "My new tracking sequence; no synchronized goal event supplied."
+}

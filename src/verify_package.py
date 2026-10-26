@@ -28,7 +28,7 @@ def same_evidence(a,b):
 def verify():
     cases=sorted((ROOT/'examples').glob('pl-[0-9][0-9]-*'));assert len(cases)==12
     for c in cases:
-        required=['README.md','replay.html','data.js','metrics.json','evidence.csv','instance.json','tracking.csv.gz','story.json','story.js','model.js','model-analysis.json','preview.gif','preview.png','video.avi']
+        required=['README.md','replay.html','data.js','decision-overlay.js','metrics.json','evidence.csv','instance.json','tracking.csv.gz','story.json','story.js','model.js','model-analysis.json','preview.gif','preview.png','video.avi']
         assert all((c/n).is_file() for n in required),c
         m=json.loads((c/'metrics.json').read_text());b=json.loads((c/'data.js').read_text().split('=',1)[1].rstrip(';\n'))
         recomputed,*_=calculate(pd.read_csv(c/'tracking.csv.gz'),m['focus_shirt'])

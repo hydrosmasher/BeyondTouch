@@ -1,0 +1,16 @@
+{
+  "case_id": "IMPORTED-LASTROW-01",
+  "match_title": "Bayern 0 - [1] Liverpool / source label only",
+  "source_name": "Ricardo Tavares / Last Row / Friends of Tracking",
+  "source_url": "https://github.com/Friends-of-Tracking-Data-FoTD/Last-Row",
+  "native_hz": 20,
+  "pitch_length_m": 105,
+  "pitch_width_m": 68,
+  "coordinates": "normalized_0_100",
+  "attack_direction": "left",
+  "focus_player_id": "13",
+  "finisher_player_id": null,
+  "description": "Real educational sequence held out from the original twelve-case demo. Fixture date and scorer have not been independently matched.",
+  "source_warning": "Last Row educational manual trajectories; partial coverage and insufficient research accuracy. Original source blob 77e053fba2f9569a60cd41d87a817bee0028c2c2.",
+  "held_out_from_original_twelve_cases": true
+}

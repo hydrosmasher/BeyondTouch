@@ -294,3 +294,7 @@ The video is a visualization of these outputs, not the model's raw input.
 ## Primary 50 fps submission renderer
 
 `src/build_submission_50fps.py` renders Liverpool–Everton directly from the native 20 Hz replay positions using linear interpolation before drawing each output frame. It produces a 27-second, 1920×1080 H.264 video at 50 fps plus a matching picture. Playback is half source speed, with opening and closing holds. Metrics and tactical rule results remain based on the original source samples. This does not establish 50 Hz captured tracking or VAR compatibility. `uploads/Liverpool-50fps-metadata.json` records cadence, frame count, source hash and output hash. Optional dependency: imageio-ffmpeg==0.6.0.
+
+## Runner options and new input data
+
+See NEW_DATA_AND_OPTIONS.md for the new CSV contract, native-rate validation, unit/origin conversion, explicit actor-ID mapping and geometric options. New options are snapshot comparisons of hypothetical movement segments, not a trained decision tree or a causal prediction. Heading uses only current/past native observations. Imported replay outputs include metrics, candidate tactical stories, an options audit JSON and media. The optional --with-model import flag calculates conditional full-pitch PC using the declared cadence and pitch dimensions; without it this surface remains unavailable.

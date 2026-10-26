@@ -1,12 +1,6 @@
 name: Build annotated real-case stories
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - src/tactical_chain.py
-      - src/story_media.py
-      - src/refresh_stories.py
-      - .github/workflows/build-story-videos.yml
 permissions:
   contents: write
 concurrency:

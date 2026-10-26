@@ -12,12 +12,12 @@ from player_influence.pitch_control import PitchControlCalculator
 from player_influence.movement_metrics import area_metrics
 import Metrica_PitchControl as mpc
 
-def scenes(df,focus_id,frame_index=-1):
-    frames=np.sort(df.frame.unique());selected=int(frames[frame_index]);times=(frames-frames[0])/20.
+def scenes(df,focus_id,frame_index=-1,source_hz=20,field_dimen=(105,68)):
+    frames=np.sort(df.frame.unique());selected=int(frames[frame_index]);times=(frames-frames[0])/source_hz
     rows={'Home':{'ball_x':0.,'ball_y':0.},'Away':{'ball_x':0.,'ball_y':0.}}
     reference=None;focus_name=None
     for pid,g in df.groupby('player'):
-        g=g.sort_values('frame');p=g[['x','y']].to_numpy(float)*[1.05,.68]-[52.5,34]
+        g=g.sort_values('frame');p=g[['x','y']].to_numpy(float)*(np.array(field_dimen)/100)-np.array(field_dimen)/2
         if not np.array_equal(g.frame.to_numpy(),frames):raise ValueError('Incomplete actor trajectory')
         v=np.gradient(p,times,axis=0);i=int(np.where(frames==selected)[0][0])
         if int(pid)==0:
@@ -34,10 +34,10 @@ def scenes(df,focus_id,frame_index=-1):
     for suffix,value in [('x',p[0]),('y',p[1]),('vx',v[0]),('vy',v[1])]:counter['Home'][focus_name+'_'+suffix]=float(value)
     return actual,counter,focus_name,float(times[np.where(frames==selected)[0][0]])
 
-def calculate(df,focus_id,grid_columns=50,reference_grid_columns=None):
-    actual,counter,focus_name,time=scenes(df,focus_id)
+def calculate(df,focus_id,grid_columns=50,reference_grid_columns=None,source_hz=20,field_dimen=(105,68)):
+    actual,counter,focus_name,time=scenes(df,focus_id,source_hz=source_hz,field_dimen=field_dimen)
     params=mpc.default_model_params();params.update(int_dt=.02,reaction_time=.7,reaction_time_def=1.)
-    pc=PitchControlCalculator(('unconfirmed','unconfirmed'),params=params,field_dimen=(105,68),n_grid_cells_x=grid_columns,exclude_offside=False)
+    pc=PitchControlCalculator(('unconfirmed','unconfirmed'),params=params,field_dimen=field_dimen,n_grid_cells_x=grid_columns,exclude_offside=False)
     observed=pc.calculate_surface(actual['Home'],actual['Away'],attacking_half_only=False,attacking_team='Home')[0]
     reference=pc.calculate_surface(counter['Home'],counter['Away'],attacking_half_only=False,attacking_team='Home')[0]
     delta=observed-reference
@@ -48,14 +48,14 @@ def calculate(df,focus_id,grid_columns=50,reference_grid_columns=None):
             'is_causal_effect':False,'is_full_match_pitch_control':False,'domain':'whole nominal pitch',
             'area':area_metrics(delta,pc.cell_area_m2),'grid':{'columns':len(pc.xgrid),'rows':len(pc.ygrid),'cell_area_m2':pc.cell_area_m2},
             'surface':delta.tolist(),'x':pc.xgrid.tolist(),'y':pc.ygrid.tolist(),
-            'assumptions':['105 × 68 m nominal scaling; actual calibration unverified.',
+            'assumptions':[f'{field_dimen[0]} × {field_dimen[1]} m declared/nominal scaling; actual calibration unverified.',
                            'Only observed players are included; missing players are not invented.',
                            'Goalkeeper identity is unconfirmed, so observed actors use generic outfield model parameters.',
                            'Offside filtering is disabled because reliable complete offside state is unavailable.',
                            'The focus reference is an artificial model-state contrast; ball and other players do not react to it.',
                            'Result is a conditional model sensitivity, not real-match causal credit, xG or physical space ownership.']}
     if reference_grid_columns:
-        ref=calculate(df,focus_id,reference_grid_columns)
+        ref=calculate(df,focus_id,reference_grid_columns,source_hz=source_hz,field_dimen=field_dimen)
         diff=abs(result['area']['net_m2']-ref['area']['net_m2']);tol=max(3.,.05*abs(ref['area']['net_m2']))
         result['numerical_sensitivity']={'reference_grid_columns':reference_grid_columns,'reference_net_m2':ref['area']['net_m2'],'absolute_difference_m2':diff,'tolerance_m2':tol,'within_declared_tolerance':diff<=tol,'meaning':'Grid stability only; does not resolve source inaccuracy or missing players.'}
     return result

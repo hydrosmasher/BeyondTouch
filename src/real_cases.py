@@ -28,19 +28,23 @@ CASES=[
  (19,'southampton',11,'2019-04-05','Mohamed Salah',80,'https://www.premierleague.com/en/news/1157086','Salah’s run and carry before Liverpool take a 2–1 lead. This clip includes on-ball movement.')
 ]
 
-def calculate(df,focus_number):
+def calculate(df,focus_number=None,*,focus_id=None,source_hz=20,field_dimen=(105,68),names=None):
     if not {'frame','player','team','x','y','player_num'}<=set(df):raise ValueError('Missing Last Row columns')
     if df.duplicated(['player','frame']).any():raise ValueError('Duplicate player/frame')
-    frames=np.sort(df.frame.unique());times=(frames-frames[0])/20.
+    frames=np.sort(df.frame.unique());times=(frames-frames[0])/source_hz
+    scale=np.array(field_dimen,dtype=float)/100
     if len(frames)<2 or not np.all(np.diff(frames)==1):raise ValueError('Source frame gap; split the clip')
     if not np.isfinite(df[['x','y']].to_numpy()).all():raise ValueError('Missing coordinates')
-    candidates=df[(df.team=='attack')&(df.player_num==focus_number)].player.unique()
+    candidates=df[(df.team=='attack')&((df.player==focus_id) if focus_id is not None else (df.player_num==focus_number))].player.unique()
     if len(candidates)!=1:raise ValueError('Focus shirt must map to exactly one local player ID')
     focus=int(candidates[0]);tracks={}
     for pid,g in df.groupby('player'):
         g=g.sort_values('frame')
         if not np.array_equal(g.frame.to_numpy(),frames):raise ValueError('Changing coverage within clip')
-        tracks[int(pid)]=g[['x','y']].to_numpy(float)*[1.05,.68]
+        tracks[int(pid)]=g[['x','y']].to_numpy(float)*scale
+    if focus_number is None:
+        value=df.loc[df.player==focus,'player_num'].iloc[0];focus_number=None if pd.isna(value) else int(value)
+    focus_name=(names.get(focus,f'Attacker {focus}') if names is not None else NAMES.get(focus_number,f'Liverpool #{focus_number}'))
     meta=df[['player','team','player_num']].drop_duplicates().set_index('player')
     defenders=[p for p in tracks if p!=0 and meta.loc[p,'team']=='defense']
     attackers=[p for p in tracks if p!=0 and meta.loc[p,'team']=='attack']
@@ -52,10 +56,10 @@ def calculate(df,focus_number):
     path=travel(focus);displacement=float(np.linalg.norm(tracks[focus][-1]-tracks[focus][0]))
     clearance=float(np.diff(times)[gaps[:-1]>=3].sum())
     # This is separation time only; do not call it the full model receiving window.
-    metrics={'schema_version':'real-observed-1','source_native_hz':20,'display_hz':50,
+    metrics={'schema_version':'real-observed-1','source_native_hz':source_hz,'display_hz':50,
       'display_interpolation_only':True,'sample_count':len(frames),'duration_s':float(times[-1]),
-      'focus_player_id':focus,'focus_shirt':focus_number,'focus_name':NAMES.get(focus_number,f'Liverpool #{focus_number}'),
-      'coordinate_assumption':{'input':'0–100 normalized pitch axes','assumed_length_m':105,'assumed_width_m':68,'actual_pitch_calibration_verified':False},
+      'focus_player_id':focus,'focus_shirt':focus_number,'focus_name':focus_name,
+      'coordinate_assumption':{'input':'0–100 normalized pitch axes','assumed_length_m':field_dimen[0],'assumed_width_m':field_dimen[1],'actual_pitch_calibration_verified':False},
       'focus_path_nominal_m':path,'focus_displacement_nominal_m':displacement,
       'directness_ratio':None if path<1e-9 else displacement/path,
       'nearest_observed_defender_start_nominal_m':float(gaps[0]),'nearest_observed_defender_end_nominal_m':float(gaps[-1]),
@@ -71,11 +75,11 @@ def calculate(df,focus_number):
     for p in sorted(tracks):
         if p==0:continue
         row=meta.loc[p];num=None if pd.isna(row.player_num) else int(row.player_num)
-        name=NAMES.get(num) if row.team=='attack' and num is not None else None
+        name=names.get(p) if names is not None else NAMES.get(num) if row.team=='attack' and num is not None else None
         roster.append({'id':p,'team':str(row.team),'shirt':num,'name':name,'identity_basis':'source shirt number and Liverpool 2019 context' if name else 'local source ID only'})
     replay=[];evidence=[]
     for i,t in enumerate(times):
-        replay.append({'t':round(float(t),4),'players':[{'id':p,'x':round(float(tracks[p][i,0]/1.05),5),'y':round(float(tracks[p][i,1]/.68),5)} for p in sorted(tracks)]})
+        replay.append({'t':float(t),'players':[{'id':p,'x':round(float(tracks[p][i,0]/scale[0]),5),'y':round(float(tracks[p][i,1]/scale[1]),5)} for p in sorted(tracks)]})
         evidence.append({'source_frame':int(frames[i]),'time_s':float(t),'focus_path_nominal_m':float(np.linalg.norm(np.diff(tracks[focus][:i+1],axis=0),axis=1).sum()),'nearest_observed_defender_nominal_m':float(gaps[i]),'separation_at_least_3m':bool(gaps[i]>=3)})
     return metrics,roster,replay,evidence
 
@@ -86,9 +90,9 @@ def base_picture(bundle,index):
     m=bundle['metrics'];f=bundle['frames'][index];im=Image.new('RGB',(1120,760),'#0c1820');d=ImageDraw.Draw(im)
     from story_media import safe_text
     original_text=d.text;d.text=lambda xy,text,*a,**kw:original_text(xy,safe_text(text),*a,**kw)
-    d.text((28,18),'BEYONDTOUCH / Premier League movement',font=font(27),fill='white')
+    d.text((28,18),'BEYONDTOUCH / '+str(bundle['instance'].get('competition','Tracking movement')),font=font(27),fill='white')
     d.text((28,58),bundle['instance']['short_title']+' | '+bundle['instance']['date'],font=font(16),fill='#baccca')
-    d.text((28,85),'Real event · educational tracking · 20 Hz source · nominal 105 × 68 m scaling',font=font(14),fill='#f5cb68')
+    d.text((28,85),f"Source {m['source_native_hz']:g} Hz | declared {m['coordinate_assumption']['assumed_length_m']:g} x {m['coordinate_assumption']['assumed_width_m']:g} m | calibration unverified",font=font(14),fill='#f5cb68')
     def xy(p):return (30+p['x']*8.4,130+(100-p['y'])*5.712)
     d.rectangle((30,130,870,701),fill='#174c41',outline='#a3c1ac',width=2)
     d.line((450,130,450,701),fill='#a3c1ac',width=2);d.ellipse((377,342,523,488),outline='#a3c1ac',width=2)
@@ -160,6 +164,8 @@ def generate(case_number,output,with_model=True):
     (output/'model-analysis.json').write_text(json.dumps(dynamic,indent=2,allow_nan=False))
     with (output/'evidence.csv').open('w',newline='') as f:
         w=csv.DictWriter(f,fieldnames=list(evidence[0]));w.writeheader();w.writerows(evidence)
+    import shutil
+    shutil.copyfile(ROOT/'src/decision-overlay.js',output/'decision-overlay.js')
     (output/'replay.html').write_text((ROOT/'src/real_replay.html').read_text())
     pictures=[picture(bundle,i) for i in range(0,len(frames),4)]
     pictures[0].save(output/'preview.gif',save_all=True,append_images=pictures[1:],duration=200,loop=0,optimize=True)

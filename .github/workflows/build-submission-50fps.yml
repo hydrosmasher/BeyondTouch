@@ -1,10 +1,6 @@
 name: Build Liverpool submission at 50 fps
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - src/build_submission_50fps.py
-      - .github/workflows/build-submission-50fps.yml
 permissions:
   contents: write
 concurrency:

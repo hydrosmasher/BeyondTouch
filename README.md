@@ -64,3 +64,15 @@ Each Liverpool case now has `story.json` with five explanation steps and explici
 ## Submission media
 
 Use the Liverpool–Everton [50 fps video](uploads/BeyondTouch-Liverpool-50fps.mp4) and [matching picture](uploads/BeyondTouch-Liverpool.png). This is interpolated presentation of 20 Hz educational tracking, with half-speed playback for readability. It is not 50 Hz captured tracking. [Media details](uploads/README.md).
+
+## Runner options and new tracking inputs
+
+Every Premier League replay now shows six possible movement arrows and a decision-tree view of the current snapshot. These are transparent geometric alternatives, not learned decisions, success probabilities or predicted defender reactions. Choose the correct attacking direction in the replay.
+
+Import a new sequence without editing code:
+
+```sh
+bash run.sh --input /path/tracking.csv --metadata /path/sequence-metadata.json --output /path/new-empty-output
+```
+
+The importer supports declared native sampling rates, pitch dimensions, units and stable string actor IDs. It rejects gaps, duplicates and missing required observations. See [input format and options guide](guide/NEW_DATA_AND_OPTIONS.md), [metadata template](data_templates/sequence-metadata.json) and [held-out real source example](data_templates/heldout-bayern-metadata.json). This imports tracking data; raw broadcast video needs a separate computer-vision adapter.

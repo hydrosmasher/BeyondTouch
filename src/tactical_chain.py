@@ -5,14 +5,15 @@ PARAMS={'response_window_s':1.5,'cover_window_s':1.5,'minimum_focus_displacement
 
 def build(bundle):
     m=bundle['metrics'];frames=bundle['frames'];roster={p['id']:p for p in bundle['roster']};t=np.array([f['t'] for f in frames]);tracks={p['id']:np.array([[next(q for q in f['players'] if q['id']==p['id'])['x']*1.05,next(q for q in f['players'] if q['id']==p['id'])['y']*.68] for f in frames]) for p in frames[0]['players']}
-    focus=m['focus_player_id'];defs=sorted(p for p in roster if roster[p]['team']=='defense');scorer=next((p for p in roster if roster[p].get('name')==bundle['instance']['scorer']),None)
+    hz=m.get('source_native_hz',20);window=max(1,round(1.5*hz));stride=max(1,round(.25*hz))
+    focus=m['focus_player_id'];defs=sorted(p for p in roster if roster[p]['team']=='defense');scorer=bundle['instance']['finisher_player_id'] if 'finisher_player_id' in bundle['instance'] else next((p for p in roster if roster[p].get('name')==bundle['instance']['scorer']),None)
     label=lambda p:roster[p].get('name') or f"observed defender D{p}" if p in defs else roster[p].get('name') or f"player {p}"
     def point(p,i):return [round(float(v),5) for v in tracks[p][i]]
     def dist(a,b):return float(np.linalg.norm(a-b))
     response=None
     # Earliest qualifying window, then closest initial defender; do not select by goal or xG.
-    for a in range(0,len(t)-30,5):
-        b=a+30;fv=tracks[focus][b]-tracks[focus][a];fl=float(np.linalg.norm(fv))
+    for a in range(0,len(t)-window,stride):
+        b=a+window;fv=tracks[focus][b]-tracks[focus][a];fl=float(np.linalg.norm(fv))
         if fl<PARAMS['minimum_focus_displacement_m']:continue
         candidates=[]
         for d in defs:
@@ -23,8 +24,8 @@ def build(bundle):
     cover=None;opening=None
     if response:
         anchor=np.array(response['anchor_nominal_xy']);d1=response['player_id'];a=response['end_index']
-        for c in range(a,len(t)-30,5):
-            e=c+30;candidates=[]
+        for c in range(a,len(t)-window,stride):
+            e=c+window;candidates=[]
             for d in defs:
                 if d==d1:continue
                 g0=dist(tracks[d][c],anchor);g1=dist(tracks[d][e],anchor)
@@ -49,4 +50,4 @@ def build(bundle):
     steps.append({'title':'4 · Space and the finisher','status':'candidate' if same else 'not_established','time_s':opening['finisher_arrival']['time_s'] if same else cover['end_s'] if cover else min(float(t[-1]),response['end_s']+1.5) if response else float(t[-1])*.75,'text':text})
     steps.append({'title':'5 · Goal context','status':'context','time_s':None,'text':f"The match context identifies {bundle['instance']['scorer']} as the scorer at {bundle['instance']['goal_minute']}′. The source clip has no synchronized shot marker, so this does not validate the preceding causal chain."})
     summary=(f"Watch {m['focus_name']} first, then the highlighted defender movements. " + (f"A nearby defender moves with the run and a second defender later approaches the first defender’s earlier position. " if cover else f"A nearby defender moves in a similar direction, but a subsequent cover is not detected. " if response else 'The data do not establish the proposed defender-attraction pattern. ')+(f"The scorer then approaches the second defender’s earlier location: this is a candidate tactical chain, not proof that the run caused the goal." if same else f"The goal is by {bundle['instance']['scorer']}; the full space-creation link remains unconfirmed. Present this as a limited case, not a proven chain."))
-    return {'schema_version':'tactical-chain-1','method':'transparent_geometric_candidate_rules','learned_model':False,'causal_attraction_established':False,'full_candidate_chain_detected':same,'source_native_hz':20,'coordinate_units':'nominal metres, assumed 105 x 68 m','thresholds':PARAMS,'selection':'earliest qualifying response window, nearest initial defender; then earliest later cover, nearest anchor at cover end','focus_player_id':focus,'finisher_player_id':scorer,'response':response,'cover':cover,'opening':opening,'steps':steps,'presentation_text':summary,'warning':'Partial educational tracking; ball/marking intent and event-synchronized shot time unavailable. Absence of a detected pattern is not proof of its absence in the match.'}
+    return {'schema_version':'tactical-chain-1','method':'transparent_geometric_candidate_rules','learned_model':False,'causal_attraction_established':False,'full_candidate_chain_detected':same,'source_native_hz':hz,'coordinate_units':'nominal metres, assumed 105 x 68 m','thresholds':PARAMS,'selection':'earliest qualifying response window, nearest initial defender; then earliest later cover, nearest anchor at cover end','focus_player_id':focus,'finisher_player_id':scorer,'response':response,'cover':cover,'opening':opening,'steps':steps,'presentation_text':summary,'warning':'Partial educational tracking; ball/marking intent and event-synchronized shot time unavailable. Absence of a detected pattern is not proof of its absence in the match.'}

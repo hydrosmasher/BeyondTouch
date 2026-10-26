@@ -49,8 +49,19 @@ def frame(video_time,poster=False):
         d.ellipse((x-radius,y-radius,x+radius,y+radius),fill=color,outline='#0c1820',width=2)
         if role:txt(d,(x+15,y-24),role,17,color,stroke_width=2,stroke_fill='#0c1820')
         elif not ball and ROSTER[pid]['shirt'] is not None:txt(d,(x,y),str(ROSTER[pid]['shirt']),11,'#0c1820',anchor='mm')
+    from decision_options import analyze
+    k=min(len(B['frames'])-1,int(t*M['source_native_hz']+1e-8))
+    node=analyze(B,'left',indices=[k])['nodes'][0]
+    origin=np.array(node['origin_normalized_xy'])*[1.05,.68]
+    for option in node['options']:
+        if not option['inside_pitch']:continue
+        target=np.array(option['target_normalized_xy'])*[1.05,.68];a,z=xy(origin),xy(target);length=math.dist(a,z);color='#77e0ab' if option['id']==node['top_geometric_option'] else '#e7e9d0'
+        if length<1:continue
+        for start in range(0,int(length),12):
+            u=start/length;v=min(start+7,length)/length;d.line([(a[0]+(z[0]-a[0])*u,a[1]+(z[1]-a[1])*u),(a[0]+(z[0]-a[0])*v,a[1]+(z[1]-a[1])*v)],fill=color,width=2)
+        angle=math.atan2(z[1]-a[1],z[0]-a[0]);d.polygon([z,(z[0]-10*math.cos(angle-.5),z[1]-10*math.sin(angle-.5)),(z[0]-10*math.cos(angle+.5),z[1]-10*math.sin(angle+.5))],fill=color)
     txt(d,(70,329),f'Source clip: {t:.2f} s',19,stroke_width=2,stroke_fill='#0c1820')
-    txt(d,(70,962),'Gold RUN | Orange D1 | Cyan D2 | Purple FIN',18,stroke_width=2,stroke_fill='#0c1820')
+    txt(d,(70,962),'Solid: observed paths | Dashed: hypothetical movement options',18,stroke_width=2,stroke_fill='#0c1820')
     d.rounded_rectangle((1170,30,1870,995),radius=20,fill='#13252c',outline='#294048',width=2)
     txt(d,(1200,57),'THE NUMBERS BEHIND THE RUN',25,COLORS['RUN']);txt(d,(1200,102),'Real movement. Clear evidence.',31)
     txt(d,(1200,158),'50 fps export | 20 Hz source | 2x slowed playback',20,'#baccca')

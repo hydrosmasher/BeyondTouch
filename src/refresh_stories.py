@@ -22,6 +22,7 @@ def refresh(folder):
     picture(bundle,len(bundle['frames'])//2).save(folder/'preview.png');avi(pictures,folder/'video.avi')
     bundle['story_video_available']=encode_mp4(folder)
     (folder/'data.js').write_text('window.REAL_CASE='+json.dumps(bundle,separators=(',',':'),allow_nan=False).replace('<','\\u003c')+';')
+    shutil.copyfile(ROOT/'src/decision-overlay.js',folder/'decision-overlay.js')
     (folder/'replay.html').write_text((ROOT/'src/real_replay.html').read_text().replace('href="../index.html"','href="../../START_HERE.html"'))
     readme=(folder/'README.md').read_text();readme=readme.split('\n## Tactical story:')[0]
     readme+='\n## Tactical story: run, response, cover, finish\n\n'+bundle['story']['presentation_text']+'\n\n'+'\n\n'.join('**'+s['title']+' ['+s['status']+']** — '+s['text'] for s in bundle['story']['steps'])+'\n\nSee story.json for thresholds, selected source IDs and exact timestamps. Arrows and trails show observed motion; tactical responsibilities remain unconfirmed.\n'

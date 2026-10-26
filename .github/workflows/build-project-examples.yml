@@ -1,0 +1,43 @@
+name: Build options and imported-data examples
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - src/import_sequence.py
+      - src/decision_options.py
+      - src/decision-overlay.js
+      - src/story_media.py
+      - .github/workflows/build-project-examples.yml
+permissions:
+  contents: write
+concurrency:
+  group: project-example-publisher
+  cancel-in-progress: false
+jobs:
+  examples:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt imageio-ffmpeg==0.6.0
+      - run: python src/refresh_stories.py
+      - run: python src/import_sequence.py --input data_templates/heldout-bayern.csv.gz --metadata data_templates/heldout-bayern-metadata.json --output outputs/heldout-check/imported-bayern
+      - run: python -c "import shutil;shutil.copytree('outputs/heldout-check/imported-bayern','examples/imported-bayern',dirs_exist_ok=True)"
+      - run: python src/build_submission_50fps.py
+      - run: python src/verify_package.py
+      - run: python src/package_release.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BeyondTouch-updated-project
+          path: outputs/releases/*.zip
+          retention-days: 90
+      - name: Publish one consistent set of examples
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add examples uploads
+          git diff --cached --quiet || git commit -m "Publish runner options, refreshed stories and a held-out tracking import"
+          git push
