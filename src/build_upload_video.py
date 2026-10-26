@@ -6,8 +6,14 @@ The GitHub workflow supplies that optional build tool.
 from pathlib import Path
 from PIL import Image,ImageDraw,ImageFont
 import argparse,json,subprocess,shutil
+from functools import lru_cache
 
 ROOT=Path(__file__).resolve().parents[1]
+@lru_cache(maxsize=1)
+def supplied_frames():
+    from PIL import ImageSequence
+    im=Image.open(ROOT/'examples/di-maria-final/sources/pitch-control-change.gif')
+    return tuple(f.convert('RGB').copy() for f in ImageSequence.Iterator(im))
 def font(n):
     for p in ['/System/Library/Fonts/Supplemental/Arial.ttf','/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf']:
         try:return ImageFont.truetype(p,n)
@@ -24,24 +30,22 @@ def frame(time):
         d.text((80,310),'Ángel Di María’s World Cup final goal',font=font(47),fill='#f5cb68')
         d.text((80,395),'Argentina v France · 18 December 2022 · goal 36′',font=font(31),fill='white')
         d.text((80,520),'Basel’s supplied pitch-control visualizations',font=font(29),fill='#b6cbc4')
-        d.text((80,575),'Three retained keyframes — not continuous tracking',font=font(29),fill='#b6cbc4')
+        d.text((80,575),'Full supplied animation + attributed event analysis',font=font(29),fill='#b6cbc4')
         d.text((80,690),'Watch the evidence, then inspect the open judge demo.',font=font(27),fill='white')
     elif time<22:
-        n=0 if time<10 else 1 if time<16 else 2
-        values=[('-9.9 s','+0.047','−0.027'),('-3.9 s','+0.314','−0.185'),('+2.0 s','+0.209','−0.145')][n]
-        p=ROOT/'examples/di-maria-final'/f'keyframe-{n+1}.png';pic=Image.open(p).convert('RGB');pic.thumbnail((1020,700));im.paste(pic,(35,135))
+        frames=supplied_frames();n=min(len(frames)-1,int((time-4)/18*len(frames)));pic=frames[n].copy();pic.thumbnail((1020,700));im.paste(pic,(35,135))
         x=1100
-        d.text((x,145),'SOURCE GOAL MARKER',font=font(19),fill='#b6cbc4');d.text((x,185),values[0],font=font(49),fill='white')
-        d.text((x,290),'DISPLAYED MAX GAIN',font=font(19),fill='#b6cbc4');d.text((x,330),values[1],font=font(48),fill='#f5cb68')
-        d.text((x,425),'DISPLAYED MAX LOSS',font=font(19),fill='#b6cbc4');d.text((x,465),values[2],font=font(48),fill='#e68d99')
-        lines=['Source plot annotations.','Not total area or xG.','Not exclusive runner credit.']
-        if n==2:lines+=['After-goal context only.']
-        for j,line in enumerate(lines):d.text((x,590+j*40),line,font=font(23),fill='#b6cbc4')
-        d.text((45,827),'KEYFRAME EXPLAINER · ΔPC baseline not independently supplied · original plot labels preserved',font=font(20),fill='#b6cbc4')
+        a=json.loads((ROOT/'examples/di-maria-final/event-analysis.json').read_text())
+        d.text((x,145),'PROVIDER SHOT CONTEXT',font=font(19),fill='#b6cbc4');d.text((x,185),f"{a['shot_xg']:.4f} xG",font=font(45),fill='#f5cb68')
+        d.text((x,290),'RECORDED PASS CHAIN',font=font(19),fill='#b6cbc4');d.text((x,330),str(a['completed_passes'])+' passes',font=font(42),fill='white')
+        d.text((x,425),'FIRST PASS TO SHOT',font=font(19),fill='#b6cbc4');d.text((x,465),f"{a['first_pass_to_shot_s']:.3f} s",font=font(42),fill='white')
+        for j,line in enumerate(['Shot xG is not run credit.','Plot ΔPC is a separate model.','Provider clocks are not aligned.']):d.text((x,570+j*36),line,font=font(21),fill='#b6cbc4')
+        logo=Image.open(ROOT/'guide/statsbomb-logo.png').convert('RGB');logo.thumbnail((320,100));d.rectangle((1090,695,1430,815),fill='white');im.paste(logo,(1100,705))
+        d.text((45,827),'SUPPLIED ANIMATION · playback retimed for explanation · original plot labels preserved',font=font(20),fill='#b6cbc4')
     else:
         d.text((80,170),'Explore the real cases.',font=font(61),fill='white')
         for y,t in [(290,'1 World Cup final evidence case'),(370,'12 Premier League educational tracking sequences'),(450,'Replay, video, written analysis and source data')]:d.text((80,y),t,font=font(36),fill='#f5cb68')
-        for y,t in [(570,'No Python required to view: extract the project and open START_HERE.html.'),(625,'Approximate Premier League distances assume a 105 × 68 m pitch.'),(675,'Partial tracking is not research-grade measurement.'),(725,'Di María raw positions, defender metres and xG remain unavailable.')]:d.text((80,y),t,font=font(25),fill='#b6cbc4')
+        for y,t in [(570,'No Python required to view: extract the project and open START_HERE.html.'),(625,'Premier League distances and model contrasts use partial educational tracking.'),(675,'Other observed players and the ball move in the dynamic-scene model.'),(725,'Di María shot xG is StatsBomb context; raw movement metrics are unavailable.')]:d.text((80,y),t,font=font(25),fill='#b6cbc4')
         d.text((80,810),'Basel’s research + Last Row / Ricardo Tavares + Friends of Tracking',font=font(22),fill='white')
     return im
 
@@ -59,8 +63,8 @@ def main():
     probe=shutil.which('ffprobe')
     if probe:
         result=json.loads(subprocess.check_output([probe,'-v','error','-show_entries','format=duration,size:stream=codec_name,width,height,r_frame_rate','-of','json',str(a.output)],text=True))
-        result['description']='Silent keyframe evidence explainer, not continuous tracking replay.'
-        result['source_keyframes']=3
+        result['description']='Silent explainer using the full supplied rendered animation and attributed StatsBomb event analysis; not reconstructed tracking.'
+        result['source_animation_frames']=len(supplied_frames())
         (a.output.parent/'video-metadata.json').write_text(json.dumps(result,indent=2))
 
 if __name__=='__main__':main()

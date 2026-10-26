@@ -1,0 +1,27 @@
+{
+  "kind": "attributed_derived_event_analysis",
+  "provider": "StatsBomb",
+  "source_url": "https://raw.githubusercontent.com/hudl/open-data/master/data/events/3869685.json",
+  "source_match_id": 3869685,
+  "source_shot_event_id": "ef86f4d9-7acd-4ed0-a5ec-9129079e8fbe",
+  "source_file_sha256": "a0b0036d50c10a4c8879d1ee9f24a7502ec2cfb264a61951c8d500dfc897ec35",
+  "shot_xg": 0.30340916,
+  "shot_xg_attributed_to_off_ball_runner": false,
+  "shot_xg_meaning": "Provider pre-shot context for the shot, not causal credit for any off-ball movement.",
+  "completed_passes": 5,
+  "first_pass_to_shot_s": 9.757,
+  "shot_clock": "00:35:22.647",
+  "first_pass_clock": "00:35:12.890",
+  "player_chain": [
+    "Nahuel Molina",
+    "Alexis Mac Allister",
+    "Lionel Messi",
+    "Julián Álvarez",
+    "Alexis Mac Allister",
+    "Ángel Di María"
+  ],
+  "raw_tracking_available": false,
+  "event_clock_aligned_with_supplied_plot": false,
+  "raw_events_redistributed": false,
+  "terms": "StatsBomb Public Data User Agreement; attributed research analysis. Original events are fetched from the provider, not redistributed here."
+}
