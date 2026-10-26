@@ -1,13 +1,6 @@
 name: Build options and imported-data examples
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - src/import_sequence.py
-      - src/decision_options.py
-      - src/decision-overlay.js
-      - src/story_media.py
-      - .github/workflows/build-project-examples.yml
 permissions:
   contents: write
 concurrency:

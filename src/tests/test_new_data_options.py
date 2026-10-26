@@ -27,6 +27,9 @@ class NewDataTests(unittest.TestCase):
         for f in changed['frames'][2:]:
             for p in f['players']:p['x']=90;p['y']=90
         self.assertEqual(before,analyze(changed,'right')['nodes'][1]);self.assertFalse(before.get('uses_future_observations',False))
+    def test_supplied_finisher_is_not_claimed_as_a_verified_goal(self):
+        self.meta['finisher_player_id']='runner';b=generate(self.path,self.meta,self.root/'out'/'case')
+        self.assertEqual(b['story']['steps'][-1]['status'],'supplied_context');self.assertFalse(b['story']['causal_attraction_established'])
     def test_boundary_options_are_not_ranked_as_feasible(self):
         b=generate(self.path,self.meta,self.root/'out'/'case')
         for f in b['frames']:

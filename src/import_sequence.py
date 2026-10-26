@@ -74,6 +74,9 @@ def generate(path,config,output,with_model=False):
     if finisher is None:
         bundle['story']['steps'][-1].update(status='unavailable',text='No scorer or synchronized shot event was supplied. This sequence is analyzed without a claimed goal.')
         bundle['story']['presentation_text']=bundle['story']['presentation_text'].replace('The goal is by unconfirmed; the full space-creation link remains unconfirmed.','No finisher was supplied; the full link to a scoring action remains unconfirmed.')
+    if finisher is not None:
+        bundle['story']['steps'][-1].update(status='supplied_context',text='The metadata names '+scorer+' as the finisher. This identity and any goal context are supplied, not independently verified; no synchronized shot is inferred.')
+        bundle['story']['presentation_text']=bundle['story']['presentation_text'].replace('The goal is by '+scorer,'The configured finisher is '+scorer).replace('The scorer then','The configured finisher then')
     bundle['decision_options']=build_options(bundle,config['attack_direction'])
     output=Path(output)
     if output.exists() and any(output.iterdir()):raise ValueError('Output folder must be empty; choose a new path to preserve existing work')

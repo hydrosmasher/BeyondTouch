@@ -59,10 +59,15 @@ def verify():
     validation=sorted((ROOT/'examples/validation').glob('[0-9][0-9]-*'));assert len(validation)==12
     for c in validation:
         m=json.loads((c/'metrics.json').read_text());assert m['instance']['real_match'] is False and m['instance']['sample_rate_hz']==50
+    imported=ROOT/'examples/imported-bayern'
+    if imported.exists():
+        im=json.loads((imported/'instance.json').read_text());ib=json.loads((imported/'data.js').read_text().split('=',1)[1].rstrip(';\n'))
+        assert im['source_sha256']==hashlib.sha256((imported/'input.csv.gz').read_bytes()).hexdigest()
+        assert len(ib['frames'])==len(ib['decision_options']['nodes']) and ib['decision_options']['uses_future_observations'] is False
     movie=ROOT/'uploads/BeyondTouch-DiMaria.mp4';assert movie.is_file() and movie.read_bytes()[4:8]==b'ftyp'
     meta=json.loads((ROOT/'uploads/video-metadata.json').read_text());assert math.isclose(float(meta['format']['duration']),30,abs_tol=.5)
     assert meta['streams'][0]['codec_name']=='h264'
-    for p in [ROOT/'START_HERE.html',wc/'replay.html',*(c/'replay.html' for c in cases),*(c/'replay.html' for c in validation)]:
+    for p in [ROOT/'START_HERE.html',wc/'replay.html',*(c/'replay.html' for c in cases),*(c/'replay.html' for c in validation),*([imported/'replay.html'] if imported.exists() else [])]:
         parser=Links();parser.feed(p.read_text())
         for url in parser.targets:
             u=urlsplit(url)
