@@ -1,0 +1,31 @@
+name: Build submission MP4
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - src/build_upload_video.py
+      - examples/di-maria-final/keyframe-*.png
+      - .github/workflows/build-upload-video.yml
+permissions:
+  contents: write
+jobs:
+  build-video:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install Pillow==12.3.0
+      - name: Install optional video build tool
+        run: command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y ffmpeg)
+      - run: python src/build_upload_video.py
+      - name: Save verified upload video
+        run: |
+          ffprobe -v error -show_entries format=duration,size -of json uploads/BeyondTouch-DiMaria.mp4
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add uploads/BeyondTouch-DiMaria.mp4 uploads/video-metadata.json
+          git diff --cached --quiet || git commit -m "Build Di Maria keyframe evidence explainer MP4"
+          git pull --rebase
+          git push
