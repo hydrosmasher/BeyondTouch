@@ -1,0 +1,42 @@
+name: Import StatsBomb Di Maria goal context
+on:
+  push:
+    paths: ['.github/workflows/import-di-maria-events.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Select the final goal and its event possession
+        shell: python
+        run: |
+          import urllib.request,json,hashlib,pathlib
+          base='https://raw.githubusercontent.com/hudl/open-data/master/'
+          raw=urllib.request.urlopen(base+'data/events/3869685.json',timeout=60).read()
+          events=json.loads(raw)
+          goals=[e for e in events if e['type']['name']=='Shot' and e.get('shot',{}).get('outcome',{}).get('name')=='Goal' and 'Di María' in e.get('player',{}).get('name','')]
+          assert len(goals)==1
+          shot=goals[0]
+          selected=[e for e in events if e.get('possession')==shot['possession'] and e['index']<=shot['index']]
+          context=dict(provider='StatsBomb',repository='https://github.com/hudl/open-data',match_id=3869685,source_url=base+'data/events/3869685.json',source_sha256=hashlib.sha256(raw).hexdigest(),shot_event=shot,possession_events=selected,meaning='Shot xG is provider context, not causal credit for a run; events are not continuous tracking.')
+          root=pathlib.Path('examples/di-maria-final');root.mkdir(parents=True,exist_ok=True)
+          (root/'event-context.json').write_text(json.dumps(context,indent=2,ensure_ascii=False))
+          guide=pathlib.Path('guide');guide.mkdir(exist_ok=True)
+          for source,dest in [('img/SB%20-%20Icon%20Lockup%20-%20Colour%20positive.png','statsbomb-logo.png'),('LICENSE.pdf','STATSBOMB_LICENSE.pdf')]:
+              (guide/dest).write_bytes(urllib.request.urlopen(base+source,timeout=60).read())
+          print('shot:',shot['id'],shot['player']['name'],shot['timestamp'],shot['shot']['statsbomb_xg'])
+          print('possession events:',len(selected))
+      - name: Save attributed source subset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add examples/di-maria-final/event-context.json guide/statsbomb-logo.png guide/STATSBOMB_LICENSE.pdf
+          git diff --cached --quiet || git commit -m "Add attributed StatsBomb event and shot context for Di Maria goal"
+          git pull --rebase
+          git push
