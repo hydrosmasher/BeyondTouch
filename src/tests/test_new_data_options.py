@@ -12,7 +12,7 @@ class NewDataTests(unittest.TestCase):
     def tearDown(self):self.temp.cleanup()
     def write(self):pd.DataFrame(self.rows).to_csv(self.path,index=False)
     def test_new_rate_dimensions_and_unknown_names_are_preserved(self):
-        b=generate(self.path,self.meta,self.root/'out'/'case');self.assertEqual(b['metrics']['source_native_hz'],50);self.assertAlmostEqual(b['metrics']['focus_path_nominal_m'],.5);self.assertEqual(b['instance']['original_time_origin_s'],1000);self.assertEqual(b['metrics']['coordinate_assumption']['assumed_length_m'],110);self.assertEqual(b['metrics']['focus_name'],'runner');self.assertIsNone(b['story']['finisher_player_id']);self.assertTrue((self.root/'out/case/decision-options.json').exists())
+        b=generate(self.path,self.meta,self.root/'out'/'case');self.assertEqual(b['metrics']['source_native_hz'],50);self.assertAlmostEqual(b['metrics']['focus_path_nominal_m'],.5);self.assertEqual(b['instance']['original_time_origin_s'],1000);self.assertEqual(b['metrics']['coordinate_assumption']['assumed_length_m'],110);self.assertEqual(b['metrics']['focus_name'],'runner');self.assertIsNone(b['story']['finisher_player_id']);self.assertTrue((self.root/'out/case/decision-options.json').exists());self.assertIn('href="input.csv"',(self.root/'out/case/replay.html').read_text())
     def test_duplicate_observation_rejected(self):
         self.rows.append(self.rows[0]);self.write()
         with self.assertRaisesRegex(ValueError,'Duplicate'):load_tracking(self.path,self.meta)

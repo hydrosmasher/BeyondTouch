@@ -85,7 +85,7 @@ def generate(path,config,output,with_model=False):
     (output/'data.js').write_text('window.REAL_CASE='+json.dumps(bundle,separators=(',',':'),allow_nan=False).replace('<','\\u003c')+';');(output/'model.js').write_text('window.DYNAMIC_MODEL='+json.dumps(dynamic,separators=(',',':'),allow_nan=False)+';')
     (output/'model-analysis.json').write_text(json.dumps(dynamic,indent=2,allow_nan=False))
     shutil.copyfile(ROOT/'src/decision-overlay.js',output/'decision-overlay.js')
-    (output/'replay.html').write_text((ROOT/'src/real_replay.html').read_text())
+    (output/'replay.html').write_text((ROOT/'src/real_replay.html').read_text().replace('href="tracking.csv.gz"','href="'+('input.csv.gz' if str(path).endswith('.gz') else 'input.csv')+'"'))
     with (output/'evidence.csv').open('w',newline='') as f:w=csv.DictWriter(f,fieldnames=list(evidence[0]));w.writeheader();w.writerows(evidence)
     step=max(1,round(hz/5));pictures=[picture(bundle,i) for i in range(0,len(frames),step)];pictures[0].save(output/'preview.gif',save_all=True,append_images=pictures[1:],duration=round(step/hz*1000),loop=0);picture(bundle,len(frames)//2).save(output/'preview.png');avi(pictures,output/'video.avi')
     shutil.copyfile(path,output/('input.csv.gz' if str(path).endswith('.gz') else 'input.csv'));(output/'input-metadata.json').write_text(json.dumps(config,indent=2))
