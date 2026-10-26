@@ -49,68 +49,73 @@ recover trajectories from raw broadcast video. Video-to-tracking computer vision
 would be a separate upstream adapter. Existing provider-specific wide formats need
 conversion to this documented long-form schema.
 
-## What the options mean
+## Guided spatial review (default)
 
-The new panel shows six dashed movement arrows at every native source snapshot:
-continue, cut left/right, go wide left/right, and check back. Left/right turns are
-relative to current motion. For a stationary runner the declared attacking
-direction supplies the reference heading. Change the direction selector if needed;
-for legacy Liverpool clips the initial selector is left, a display default that
-must be checked against the match orientation. Imported sequences use their
-explicitly declared direction.
+The replay starts with observed movement and no arrow fan. Click **Start guided
+review here**. At each source checkpoint it pauses, shows **Space A**, then
+**Space B**, and an optional third distinct pocket, one at a time. After those
+comparisons it reveals the actual next 1.5 seconds of source movement and pauses
+again. Use Pause review, Next space, Reveal actual movement or Free replay.
 
-The one-second step length is speed × 1 s limited to 2–6 m. This is a demonstration
-assumption, not a biomechanical feasibility guarantee. Each straight segment is
-sampled at 13 points against current observed defender positions. Out-of-pitch
-branches are invalid. Segments with a gap below 1.5 m are labelled crowded.
+Choose Attacking team, Defending team or Both teams. Green marks the one proposed
+pocket and the attacker's illustrative route. Pink shows the straight-line distance
+from the current nearest observed defender to that same pocket. This is a possible
+covering comparison, not a predicted defender response or marking assignment.
+All other represented players resume their observed motion during reveal.
 
-The score is a transparent geometric utility:
+Two spaces are shown by default. Up to three can be selected when sufficiently
+distinct in the current geometry. Candidate endpoints must stay inside the pitch,
+have at least 2 m separation from the nearest observed defender and be at least
+3 m apart from previously selected pockets. If the inputs do not support two
+such pockets, fewer are shown rather than inventing available space. These point
+and route checks do not establish offside eligibility or actual tactical safety.
+
+Under the hood, six heading-relative movement candidates are evaluated, but they
+are never displayed as a permanent fan. The one-second step length is speed × 1 s
+limited to 2–6 m. For a stationary runner, the declared attack direction supplies
+the heading. Segment clearance samples 13 points against current observed defenders.
+Candidates use this transparent utility to order the comparisons:
 
 ```
 0.7 × min(minimum sampled defender gap / 8 m, 1)
 + 0.3 × ((forward progress / step length + 1) / 2)
 ```
 
-A higher value means more clearance and/or progress under this rule. It is not
-success probability, xG, trained decision-tree output, tactical optimality or a
-prediction of defender reactions. Missing defenders can overstate clearance.
-The tree exposes two leaves for each branch: continue under the current snapshot
-assumption, or reassess after the next observation. It does not fabricate a future
-match. Pass and shot choices are deliberately unavailable without reliable
-possession and event information.
+That value is not a success probability, xG, optimal decision or trained policy.
+No future observed frame is used to score a source snapshot. Later source movement
+is revealed afterward as evidence, not as a forecast. The review helps both teams
+explore what might develop; it does not claim to know what will happen. Pass and
+shot choices still need reliable possession/events and are not fabricated.
 
-Solid trails remain actual source movement; dashed arrows are alternatives.
-Defenders keep moving in the observed replay. They are held at the current
-snapshot only while comparing hypothetical segments. No future source frame is
-used to score a native-frame option: heading uses the current and preceding
-observations. Browser interpolation for display does not add measurements.
+Attacking direction is explicitly supplied for imports. The Liverpool demos start
+with left as a display default; check the direction against the source orientation.
+The observer may change it in the replay.
 
 ## Files and implementation
 
-- `src/import_sequence.py`: validates and converts new long-form tracking.
-- `src/real_cases.py`: shared observed metrics, now parameterized by rate, dimensions
-  and explicit focus ID rather than a fixed Liverpool shirt.
-- `src/tactical_chain.py`: rate-aware candidate response/cover explanations.
-- `src/decision_options.py`: Python option analysis and audit JSON for new data.
-- `src/decision-overlay.js`: equivalent live computation for the replay.
-- `decision-options.json`: every imported native snapshot and its branches.
-- `instance.json`: source checksum, supplied context and mapping from source IDs
-  to the replay's internal numeric IDs. IDs are not actual shirt numbers.
+- `src/import_sequence.py`: CSV validation, unit/origin conversion, identity mapping.
+- `src/real_cases.py`: native-rate observed metrics.
+- `src/decision_options.py`: snapshot candidate geometry and audit JSON.
+- `src/guided_review.py`: select 2–3 distinct pockets and schedule pause/compare/reveal.
+- `src/guided-review.js`: interactive review controller and team perspectives.
+- `src/decision-overlay.js`: equivalent browser snapshot arithmetic.
+- `decision-options.json`: native-frame candidate evidence for imported data.
+- `instance.json`: source checksum, metadata and original-to-internal actor mapping.
 
-Imported sequences generate observed metrics and decision alternatives. Add
-`--with-model` to calculate the conditional full-pitch PC endpoint overlay too;
-this uses the declared native cadence and pitch dimensions. It uses the same
-explicit generic goalkeeper/offside assumptions as the educational demo. Without
-that optional flag the endpoint surface remains unavailable. The full receiving-window test and shot xG likewise
-remain unavailable unless separately supported by trustworthy inputs.
+Add `--with-model` to an import for the optional conditional pitch-control endpoint
+surface, using the declared native rate and pitch dimensions. This remains a model
+contrast with explicit goalkeeper/offside assumptions, not causal match impact.
+Without that flag the surface stays unavailable. Goal xG and the full receiving
+window are not invented from incomplete inputs.
 
-## Try the held-out real input
+## Try a held-out real input
 
 ```sh
 bash run.sh --input data_templates/heldout-bayern.csv.gz --metadata data_templates/heldout-bayern-metadata.json --output outputs/my-import/sequence
 ```
 
-This is a real Last Row sequence withheld from the original twelve examples. Its
-source label mentions Bayern–Liverpool; date and scorer are not independently
-matched. It is not presented as a new Premier League case or validation of the
-options scoring. Source credit and original dataset provenance are retained.
+This real Last Row sequence was not in the original twelve-case demo. The source
+label mentions Bayern–Liverpool; its date and scorer are not independently matched.
+It is not presented as a Premier League case or validation of predictive accuracy.
+Source credit and original dataset provenance are retained. Raw broadcast video
+still needs a separate video-to-tracking computer-vision adapter.

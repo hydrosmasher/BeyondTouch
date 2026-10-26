@@ -67,7 +67,7 @@ Use the Liverpool–Everton [50 fps video](uploads/BeyondTouch-Liverpool-50fps.m
 
 ## Runner options and new tracking inputs
 
-Every Premier League replay now shows six possible movement arrows and a decision-tree view of the current snapshot. These are transparent geometric alternatives, not learned decisions, success probabilities or predicted defender reactions. Choose the correct attacking direction in the replay.
+Every replay now offers a guided pause → compare spaces → reveal experience. It shows two distinct pockets sequentially (up to three when available), with attacking and defending perspectives, before revealing actual source movement. These are transparent geometric alternatives, not learned decisions, success probabilities or predicted defender reactions. Choose the correct attacking direction in the replay.
 
 Import a new sequence without editing code:
 

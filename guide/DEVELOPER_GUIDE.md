@@ -298,3 +298,7 @@ The video is a visualization of these outputs, not the model's raw input.
 ## Runner options and new input data
 
 See NEW_DATA_AND_OPTIONS.md for the new CSV contract, native-rate validation, unit/origin conversion, explicit actor-ID mapping and geometric options. New options are snapshot comparisons of hypothetical movement segments, not a trained decision tree or a causal prediction. Heading uses only current/past native observations. Imported replay outputs include metrics, candidate tactical stories, an options audit JSON and media. The optional --with-model import flag calculates conditional full-pitch PC using the declared cadence and pitch dimensions; without it this surface remains unavailable.
+
+## Final guided experience
+
+The display no longer shows six simultaneous arrows. It pauses, highlights Space A, then Space B (optionally a third distinct pocket), and reveals the actual continuation. Attacking, defending and combined views use current snapshot geometry. The current nearest defender to a pocket supplies an illustrative cover distance, not a predicted response. `guided_review.py` schedules the offline video and `guided-review.js` runs the interactive controller. There is no implemented Microsoft AI integration.

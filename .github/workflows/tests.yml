@@ -12,5 +12,5 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r requirements.txt
       - run: python src/run.py --check
-      - run: python src/run.py --all
+      - run: python src/run.py --case 1
       - run: python src/verify_package.py

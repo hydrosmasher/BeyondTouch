@@ -1,17 +1,15 @@
-# Submission text
+# Final submission copy
 
 ## Tagline
 
-Follow the run. Reveal the response. BeyondTouch turns real football movement into visual stories, transparent metrics and explanations grounded in evidence.
+Pause the play. Explore the possibilities. Reveal the movement behind the moment.
 
 ## Description
 
-A goal is the final moment of a much larger story. BeyondTouch helps explain the movement that came before it: the attacking run, a nearby defender’s response, a possible covering movement, and the space the finisher may exploit.
+BeyondTouch turns football tracking data into an accessible, explainable match experience. At a decision point, the play pauses. Viewers compare two distinct spaces one at a time, explore an attacking or defending perspective, and then reveal what the players actually did. This helps fans follow the tactical story, analysts examine candidate responses and broadcasters explain the movement behind the moment.
 
-The working demo features twelve real Premier League sequences from Liverpool’s 2019 matches. Coloured player paths, direction arrows, timed captions and interactive story cards make each sequence easy to follow. Every case identifies its match, focus player, source data, available measurements and uncertainties.
+The working demo includes twelve Premier League sequences, a separate real sequence imported through the new data pipeline, observed movement metrics, candidate defender-response and covering explanations, and a 50 fps guided submission video. Analysts can import new tracking CSVs with declared sampling rates, pitch dimensions, actor identities and attacking direction. The optional pitch-control comparison uses those declared settings.
 
-Building on pitch-control research coauthored by team member Bassel Hammad, BeyondTouch combines approximate run distances, observed defender travel, separation measurements and conditional pitch-control comparisons. Transparent rules identify candidate response and covering patterns; explanations distinguish those interpretations from observed movement and independently verified goal context. A successful finish is never treated as proof that one run caused the goal.
+Every alternative is grounded in the current observed geometry and clearly separated from the subsequent recorded play. Proposed spaces and covering distances are what-if comparisons, not success probabilities, predictions or proof that a run caused a goal. Names, source provenance, missing observations and calibration limits remain visible.
 
-The source trajectories are educational, manually collected and partial. Calculations retain their native 20 Hz samples; the interactive display and submission video interpolate for smooth presentation at 50 Hz or 50 fps. Interpolation adds display frames, not measurement accuracy. Current explanations are generated deterministically from the structured evidence.
-
-Judges can extract the project and open START_HERE.html without Python, accounts or API keys. Developers receive reproducible source data, calculation code, tests and a guide explaining every step from the supplied observations to the final story.
+The current explanations and review logic are deterministic; this submission does not claim an implemented Microsoft AI integration. Judges can open the offline demo without Python or accounts. Developers receive source data, code, templates, tests and a guide explaining the pipeline.

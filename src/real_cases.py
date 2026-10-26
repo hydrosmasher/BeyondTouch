@@ -4,6 +4,7 @@ No missing players, xG or pitch-control surfaces are synthesized for these cases
 """
 from pathlib import Path
 import argparse,csv,json,math,hashlib,html,io,struct
+from functools import lru_cache
 import numpy as np
 import pandas as pd
 from PIL import Image,ImageDraw,ImageFont
@@ -83,6 +84,7 @@ def calculate(df,focus_number=None,*,focus_id=None,source_hz=20,field_dimen=(105
         evidence.append({'source_frame':int(frames[i]),'time_s':float(t),'focus_path_nominal_m':float(np.linalg.norm(np.diff(tracks[focus][:i+1],axis=0),axis=1).sum()),'nearest_observed_defender_nominal_m':float(gaps[i]),'separation_at_least_3m':bool(gaps[i]>=3)})
     return metrics,roster,replay,evidence
 
+@lru_cache(maxsize=32)
 def font(size):
     return ImageFont.load_default(size=size)
 
@@ -165,13 +167,14 @@ def generate(case_number,output,with_model=True):
     with (output/'evidence.csv').open('w',newline='') as f:
         w=csv.DictWriter(f,fieldnames=list(evidence[0]));w.writeheader();w.writerows(evidence)
     import shutil
+    shutil.copyfile(ROOT/'src/guided-review.js',output/'guided-review.js')
     shutil.copyfile(ROOT/'src/decision-overlay.js',output/'decision-overlay.js')
     (output/'replay.html').write_text((ROOT/'src/real_replay.html').read_text())
     pictures=[picture(bundle,i) for i in range(0,len(frames),4)]
     pictures[0].save(output/'preview.gif',save_all=True,append_images=pictures[1:],duration=200,loop=0,optimize=True)
     picture(bundle,len(frames)//2).save(output/'preview.png');avi(pictures,output/'video.avi')
-    from refresh_stories import encode_mp4
-    bundle['story_video_available']=encode_mp4(output)
+    from guided_review import save_media
+    bundle['story_video_available']=save_media(bundle,output)
     (output/'data.js').write_text('window.REAL_CASE='+json.dumps(bundle,separators=(',',':'),allow_nan=False).replace('<','\\u003c')+';')
     ds=m['associated_defender_path_sum_nominal_m'];dtext='not selected' if ds is None else f'≈ {ds:.2f} m'
     text=f'''# {instance['id']} · {instance['short_title']}
