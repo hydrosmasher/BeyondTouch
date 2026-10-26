@@ -1,0 +1,20 @@
+{
+  "case_id": "PL-04",
+  "match": "Liverpool v Everton",
+  "date": "2019-12-04",
+  "focus": "Sadio Mane",
+  "goal_context": "Divock Origi 6th minute",
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "pixel_format": "yuv420p",
+  "output_fps": 50,
+  "source_tracking_hz": 20,
+  "positions_interpolated_before_rendering": true,
+  "playback_source_speed": 0.5,
+  "duration_s": 27,
+  "encoded_frames": 1350,
+  "source_sha256": "b0a571b62b0fccb84175d19a6cef4724731e7a7851eb5956ef8c4ea799bfe0a1",
+  "mp4_sha256": "21ae32a98620e5d8fdc28f7bc91ec905e39b649f8fac6ec42a254c51531fea48",
+  "no_causal_attribution": true
+}
