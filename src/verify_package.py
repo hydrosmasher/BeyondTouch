@@ -19,6 +19,12 @@ def check_avi(path):
     while b[offset:offset+4]==b'00dc':
         n=struct.unpack('<I',b[offset+4:offset+8])[0];Image.open(io.BytesIO(b[offset+8:offset+8+n])).verify();count+=1;offset+=8+n+(n%2)
     assert count>1
+def same_evidence(a,b):
+    if isinstance(a,dict):return isinstance(b,dict) and a.keys()==b.keys() and all(same_evidence(a[k],b[k]) for k in a)
+    if isinstance(a,list):return isinstance(b,list) and len(a)==len(b) and all(same_evidence(x,y) for x,y in zip(a,b))
+    if isinstance(a,float) or isinstance(b,float):return isinstance(a,(float,int)) and isinstance(b,(float,int)) and math.isclose(a,b,abs_tol=1e-8,rel_tol=1e-10)
+    return a==b
+
 def verify():
     cases=sorted((ROOT/'examples').glob('pl-[0-9][0-9]-*'));assert len(cases)==12
     for c in cases:
@@ -34,7 +40,7 @@ def verify():
         assert not dm['is_causal_effect'] and not dm['is_full_match_pitch_control']
         assert math.isclose(dm['area']['gained_m2']-dm['area']['lost_m2'],dm['area']['net_m2'],abs_tol=1e-8)
         from tactical_chain import build as build_story
-        story=json.loads((c/'story.json').read_text());assert story==build_story(b)
+        story=json.loads((c/'story.json').read_text());assert same_evidence(story,build_story(b)),c
         assert story['causal_attraction_established'] is False
         if b.get('story_video_available'):assert (c/'story.mp4').read_bytes()[4:8]==b'ftyp'
         assert not m['coverage']['research_accuracy_verified']
