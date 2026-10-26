@@ -1,7 +1,7 @@
 name: Preserve supplied media and rebuild submission video
 on:
   push:
-    paths: ['.media-build/manifest.json']
+    paths: ['.media-build/manifest.json', '.github/workflows/assemble-media.yml']
 permissions:
   contents: write
 jobs:
@@ -22,8 +22,7 @@ jobs:
               assert hashlib.sha256(raw).hexdigest()==entry['sha256']
               target=pathlib.Path(entry['target']);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
           shutil.rmtree(root)
-      - run: python -m pip install Pillow==12.3.0
-      - run: command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y ffmpeg)
+      - run: python -m pip install Pillow==12.3.0 imageio-ffmpeg==0.6.0
       - run: python src/build_upload_video.py
       - name: Save original media and submission outputs
         run: |

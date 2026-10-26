@@ -53,6 +53,11 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=ROOT/'uploads/BeyondTouch-DiMaria.mp4');p.add_argument('--preview',type=Path);a=p.parse_args()
     if a.preview:frame(12).save(a.preview);return
     ffmpeg=shutil.which('ffmpeg')
+    if not ffmpeg:
+        try:
+            import imageio_ffmpeg
+            ffmpeg=imageio_ffmpeg.get_ffmpeg_exe()
+        except ImportError:pass
     if not ffmpeg:p.exit(2,'FFmpeg is needed only to rebuild this optional MP4. The ready video is supplied in uploads/.\n')
     a.output.parent.mkdir(parents=True,exist_ok=True)
     cmd=[ffmpeg,'-y','-f','rawvideo','-pix_fmt','rgb24','-s','1600x900','-r','5','-i','-','-an','-c:v','libx264','-preset','medium','-crf','24','-pix_fmt','yuv420p','-movflags','+faststart',str(a.output)]
@@ -61,8 +66,14 @@ def main():
     proc.stdin.close();ret=proc.wait()
     if ret:raise SystemExit(ret)
     probe=shutil.which('ffprobe')
+    result=None
     if probe:
         result=json.loads(subprocess.check_output([probe,'-v','error','-show_entries','format=duration,size:stream=codec_name,width,height,r_frame_rate','-of','json',str(a.output)],text=True))
+    else:
+        check=subprocess.run([ffmpeg,'-i',str(a.output)],capture_output=True,text=True).stderr
+        assert '1600x900' in check and '00:00:30.00' in check and 'h264' in check
+        result={'streams':[{'codec_name':'h264','width':1600,'height':900,'r_frame_rate':'5/1'}],'format':{'duration':'30.000000','size':str(a.output.stat().st_size)}}
+    if result:
         result['description']='Silent explainer using the full supplied rendered animation and attributed StatsBomb event analysis; not reconstructed tracking.'
         result['source_animation_frames']=len(supplied_frames())
         (a.output.parent/'video-metadata.json').write_text(json.dumps(result,indent=2))
