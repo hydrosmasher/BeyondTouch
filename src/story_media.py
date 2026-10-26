@@ -1,5 +1,8 @@
 """Render observed trails and arrows; no defender destinations are simulated."""
-import math,textwrap
+import math,textwrap,unicodedata
+def safe_text(text):
+    for a,b in [("≈","approx."),("×","x"),("–"," to "),("→"," -> "),("’","\'"),("·","|")]:text=str(text).replace(a,b)
+    return unicodedata.normalize("NFKD",str(text)).encode("ascii","ignore").decode()
 from PIL import Image,ImageDraw,ImageFont
 COLORS={'runner':'#f5cb68','response':'#ff9d5c','cover':'#59d9e8','finisher':'#cf9cff'}
 def draw_arrow(d,a,b,color,width=4):
@@ -7,7 +10,7 @@ def draw_arrow(d,a,b,color,width=4):
     d.line([a,b],fill=color,width=width);angle=math.atan2(b[1]-a[1],b[0]-a[0]);L=11
     d.polygon([b,(b[0]-L*math.cos(angle-.5),b[1]-L*math.sin(angle-.5)),(b[0]-L*math.cos(angle+.5),b[1]-L*math.sin(angle+.5))],fill=color)
 def render(base,bundle,index):
-    out=Image.new('RGB',(1120,1000),'#0c1820');out.paste(base,(0,0));d=ImageDraw.Draw(out);font=lambda n:ImageFont.load_default(size=n)
+    out=Image.new('RGB',(1120,1000),'#0c1820');out.paste(base,(0,0));d=ImageDraw.Draw(out);original_text=d.text;d.text=lambda xy,text,*a,**kw:original_text(xy,safe_text(text),*a,**kw);font=lambda n:ImageFont.load_default(size=n)
     story=bundle['story'];frames=bundle['frames'];t=frames[index]['t'];xy=lambda p:(30+p['x']*8.4,130+(100-p['y'])*5.712)
     roles=[(story['focus_player_id'],'RUN',COLORS['runner'])]
     if story['response']:roles.append((story['response']['player_id'],'D1',COLORS['response']))

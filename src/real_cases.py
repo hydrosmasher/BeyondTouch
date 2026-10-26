@@ -84,6 +84,8 @@ def font(size):
 
 def base_picture(bundle,index):
     m=bundle['metrics'];f=bundle['frames'][index];im=Image.new('RGB',(1120,760),'#0c1820');d=ImageDraw.Draw(im)
+    from story_media import safe_text
+    original_text=d.text;d.text=lambda xy,text,*a,**kw:original_text(xy,safe_text(text),*a,**kw)
     d.text((28,18),'BEYONDTOUCH / Premier League movement',font=font(27),fill='white')
     d.text((28,58),bundle['instance']['short_title']+' | '+bundle['instance']['date'],font=font(16),fill='#baccca')
     d.text((28,85),'Real event · educational tracking · 20 Hz source · nominal 105 × 68 m scaling',font=font(14),fill='#f5cb68')

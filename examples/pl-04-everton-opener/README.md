@@ -50,5 +50,3 @@ Watch Sadio Mané first, then the highlighted defender movements. A nearby defen
 **5 · Goal context [context]** — The match context identifies Divock Origi as the scorer at 6′. The source clip has no synchronized shot marker, so this does not validate the preceding causal chain.
 
 See story.json for thresholds, selected source IDs and exact timestamps. Arrows and trails show observed motion; tactical responsibilities remain unconfirmed.
-
-[Annotated story MP4](story.mp4) · [AVI fallback](video.avi)

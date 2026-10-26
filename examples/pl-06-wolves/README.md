@@ -50,5 +50,3 @@ Watch Trent Alexander-Arnold first, then the highlighted defender movements. A n
 **5 · Goal context [context]** — The match context identifies Sadio Mané as the scorer at 17′. The source clip has no synchronized shot marker, so this does not validate the preceding causal chain.
 
 See story.json for thresholds, selected source IDs and exact timestamps. Arrows and trails show observed motion; tactical responsibilities remain unconfirmed.
-
-[Annotated story MP4](story.mp4) · [AVI fallback](video.avi)

@@ -6,6 +6,9 @@ metrics. Main demo: Di Maria's World Cup final goal plus 12 real Premier
 League sequences. Twelve synthetic cases remain separate validation tests.
 
 What is new
+Story cards plus coloured observed defender trails and direction arrows explain
+run, response, cover and finishing context. Six covering candidates are detected;
+no complete finisher chain is established by the current rule.
 Other observed players and the ball move in the conditional model comparison.
 Only the selected focus player's state changes in the reference scene.
 Di Maria shot context: StatsBomb xG 0.30340916, five completed passes,

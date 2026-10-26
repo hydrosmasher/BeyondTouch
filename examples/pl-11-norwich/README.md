@@ -50,5 +50,3 @@ Watch Jordan Henderson first, then the highlighted defender movements. A nearby 
 **5 · Goal context [context]** — The match context identifies Virgil van Dijk as the scorer at 28′. The source clip has no synchronized shot marker, so this does not validate the preceding causal chain.
 
 See story.json for thresholds, selected source IDs and exact timestamps. Arrows and trails show observed motion; tactical responsibilities remain unconfirmed.
-
-[Annotated story MP4](story.mp4) · [AVI fallback](video.avi)
